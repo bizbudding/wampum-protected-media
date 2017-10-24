@@ -3,7 +3,7 @@
  * Plugin Name:       Protected PDFs
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.0.1
+ * Version:           1.0.2
  *
  * Author:            BizBudding, Mike Hemberger
  * Author URI:        https://bizbudding.com
@@ -95,7 +95,7 @@ final class PPDFS {
 
 		// Plugin version.
 		if ( ! defined( 'PPDFS_VERSION' ) ) {
-			define( 'PPDFS_VERSION', '1.0.1' );
+			define( 'PPDFS_VERSION', '1.0.2' );
 		}
 
 		// Plugin Folder Path.
@@ -140,7 +140,8 @@ final class PPDFS {
 		register_activation_hook(   __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
-		add_action( 'plugins_loaded',        array( $this, 'init' ) );
+		add_action( 'init',                  array( $this, 'updater' ) );
+		add_action( 'init',                  array( $this, 'field_group' ) );
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
 		add_action( 'after_setup_theme',     array( $this, 'image_size' ) );
@@ -156,8 +157,7 @@ final class PPDFS {
 		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
 	}
 
-	public function init() {
-		$this->field_group();
+	public function updater() {
 		/**
 		 * Setup the updater.
 		 *
