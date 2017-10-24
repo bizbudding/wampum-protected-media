@@ -335,7 +335,7 @@ final class PPDFS {
 				// Image.
 				$image = '<span class="ppdf-cell ppdf-image ppdf-launcher"></span>';
 				if ( $item['image'] ) {
-					$image = sprintf( '<a href="#" ppdf="%s" class="ppdf-cell ppdf-image ppdf-launcher">%s</a>',
+					$image = sprintf( '<a href="#" class="ppdf-cell ppdf-image ppdf-launcher" ppdf="%s">%s</a>',
 						$file_url,
 						wp_get_attachment_image( $item['image'], 'vertical-thumb' )
 					);
@@ -344,8 +344,8 @@ final class PPDFS {
 				// Title.
 				$title = '';
 				if ( $item['title'] ) {
-					$title = sprintf( '<span class="ppdf-title"><a href="#" ppdf="%s" class="ppdf-launcher">%s</a></span>',
-						esc_attr( $item['title'] ),
+					$title = sprintf( '<span class="ppdf-title"><a href="#" class="ppdf-launcher" ppdf="%s">%s</a></span>',
+						$file_url,
 						esc_html( $item['title'] )
 					);
 				} else {
@@ -381,11 +381,11 @@ final class PPDFS {
 
 			echo "<script type='text/javascript'>
 				(function($) {
+					var viewer = $( '#ppdf-viewer' );
 					$( '#ppdf-list' ).on( 'click', '.ppdf-launcher', function(e) {
 						e.preventDefault();
-						var src    = $(this).attr( 'ppdf' );
-						var viewer = $( '#ppdf-viewer' );
-						viewer.find( 'iframe' ).src = src;
+						var src = $(this).attr( 'ppdf' );
+						viewer.find( 'iframe' ).attr( 'src', src );
 						viewer.show();
 						$(document).keydown(function(e) {
 							switch(e.which) {
