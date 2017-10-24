@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Protected PDFs
  * Plugin URI:      https://bizbudding.com
- * Description:     Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to. Requires ACF Pro.
+ * Description:     Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
  * Version:         1.0.0
  *
  * Author:          BizBudding, Mike Hemberger
@@ -12,39 +12,39 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'Protected_PDFS' ) ) :
+if ( ! class_exists( 'PPDFS' ) ) :
 
 /**
- * Main Protected_PDFS Class.
+ * Main PPDFS Class.
  *
  * @since 1.0.0
  */
-final class Protected_PDFS {
+final class PPDFS {
 
 	/**
-	 * @var Protected_PDFS The one true Protected_PDFS
+	 * @var PPDFS The one true PPDFS
 	 * @since 1.0.0
 	 */
 	private static $instance;
 
 	/**
-	 * Main Protected_PDFS Instance.
+	 * Main PPDFS Instance.
 	 *
-	 * Insures that only one instance of Protected_PDFS exists in memory at any one
+	 * Insures that only one instance of PPDFS exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
 	 * @since   1.0.0
 	 * @static  var array $instance
-	 * @uses    Protected_PDFS::setup_constants() Setup the constants needed.
-	 * @uses    Protected_PDFS::includes() Include the required files.
-	 * @uses    Protected_PDFS::setup() Activate, deactivate, etc.
-	 * @see     Protected_PDFS()
-	 * @return  object | Protected_PDFS The one true Protected_PDFS
+	 * @uses    PPDFS::setup_constants() Setup the constants needed.
+	 * @uses    PPDFS::includes() Include the required files.
+	 * @uses    PPDFS::setup() Activate, deactivate, etc.
+	 * @see     ppdfs()
+	 * @return  object | PPDFS The one true PPDFS
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
 			// Setup the setup
-			self::$instance = new Protected_PDFS;
+			self::$instance = new PPDFS;
 			// Methods
 			self::$instance->setup_constants();
 			self::$instance->includes();
@@ -91,33 +91,33 @@ final class Protected_PDFS {
 	private function setup_constants() {
 
 		// Plugin version.
-		if ( ! defined( 'PROTECTED_PDFS_VERSION' ) ) {
-			define( 'PROTECTED_PDFS_VERSION', '1.0.0' );
+		if ( ! defined( 'PPDFS_VERSION' ) ) {
+			define( 'PPDFS_VERSION', '1.0.0' );
 		}
 
 		// Plugin Folder Path.
-		if ( ! defined( 'PROTECTED_PDFS_PLUGIN_DIR' ) ) {
-			define( 'PROTECTED_PDFS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+		if ( ! defined( 'PPDFS_PLUGIN_DIR' ) ) {
+			define( 'PPDFS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 		}
 
 		// Plugin Includes Path
-		if ( ! defined( 'PROTECTED_PDFS_INCLUDES_DIR' ) ) {
-			define( 'PROTECTED_PDFS_INCLUDES_DIR', PROTECTED_PDFS_PLUGIN_DIR . 'includes/' );
-		}
+		// if ( ! defined( 'PPDFS_INCLUDES_DIR' ) ) {
+		// 	define( 'PPDFS_INCLUDES_DIR', PPDFS_PLUGIN_DIR . 'includes/' );
+		// }
 
 		// Plugin Folder URL.
-		if ( ! defined( 'PROTECTED_PDFS_PLUGIN_URL' ) ) {
-			define( 'PROTECTED_PDFS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+		if ( ! defined( 'PPDFS_PLUGIN_URL' ) ) {
+			define( 'PPDFS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
 
 		// Plugin Root File.
-		if ( ! defined( 'PROTECTED_PDFS_PLUGIN_FILE' ) ) {
-			define( 'PROTECTED_PDFS_PLUGIN_FILE', __FILE__ );
+		if ( ! defined( 'PPDFS_PLUGIN_FILE' ) ) {
+			define( 'PPDFS_PLUGIN_FILE', __FILE__ );
 		}
 
 		// Plugin Base Name
-		if ( ! defined( 'PROTECTED_PDFS_BASENAME' ) ) {
-			define( 'PROTECTED_PDFS_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
+		if ( ! defined( 'PPDFS_BASENAME' ) ) {
+			define( 'PPDFS_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
 		}
 
 	}
@@ -130,7 +130,7 @@ final class Protected_PDFS {
 	 * @return  void
 	 */
 	private function includes() {
-		foreach ( glob( PROTECTED_PDFS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
+		// foreach ( glob( PPDFS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
 	}
 
 	public function hooks() {
@@ -164,15 +164,12 @@ final class Protected_PDFS {
 		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
 			require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php';
 		}
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/maiprowp/mai-testimonials/', __FILE__, 'mai-testimonials' );
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/protected-pdfs/', __FILE__, 'protected-pdfs' );
 	}
 
 	// Register scripts for later enqueue.
 	public function register_scripts() {
-		wp_register_style( 'protected-pdfs', PROTECTED_PDFS_PLUGIN_URL . 'assets/css/protected-pdfs.css', array(), PROTECTED_PDFS_VERSION );
-		// wp_register_script( 'pdf-js',        PROTECTED_PDFS_PLUGIN_URL . 'assets/js/pdf.js',             array(),                             '1.9.659',              true );
-		// wp_register_script( 'pdf-js-worker', PROTECTED_PDFS_PLUGIN_URL . 'assets/js/pdf.worker.js',      array( 'pdf-js' ),                   '1.9.659',              true );
-		// wp_register_script( 'protected-pdfs', PROTECTED_PDFS_PLUGIN_URL . 'assets/js/protected-pdfs.js', array( 'pdf-js', 'pdf-js-worker' ), PROTECTED_PDFS_VERSION, true );
+		wp_register_style( 'protected-pdfs', PPDFS_PLUGIN_URL . 'assets/css/protected-pdfs.css', array(), PPDFS_VERSION );
 	}
 
 	// Change the upload directory.
@@ -181,7 +178,7 @@ final class Protected_PDFS {
 		return $errors;
 	}
 
-	// Update paths accordingly before displaying link to file/
+	// Update paths accordingly before displaying link to file. Currently unused.
 	public function field_display( $field ) {
 		// get_home_path();
 		add_filter( 'upload_dir', array( $this, 'upload_directory' ) );
@@ -239,7 +236,7 @@ final class Protected_PDFS {
 
 				// File URL.
 				$file_url = wp_get_attachment_url( $item['file'] );
-				$file_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', PROTECTED_PDFS_PLUGIN_URL, $file_url ) );
+				$file_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', PPDFS_PLUGIN_URL, $file_url ) );
 
 				// Image.
 				$image = '<span class="ppdf-cell ppdf-image ppdf-launcher"></span>';
@@ -551,23 +548,23 @@ final class Protected_PDFS {
 endif; // End if class_exists check.
 
 /**
- * The main function for that returns Protected_PDFS
+ * The main function for that returns PPDFS
  *
- * The main function responsible for returning the one true Protected_PDFS
+ * The main function responsible for returning the one true PPDFS
  * Instance to functions everywhere.
  *
  * Use this function like you would a global variable, except without needing
  * to declare the global.
  *
- * Example: <?php $plugin = Protected_PDFS(); ?>
+ * Example: <?php $plugin = PPDFS(); ?>
  *
  * @since 1.0.0
  *
- * @return object|Protected_PDFS The one true Protected_PDFS Instance.
+ * @return object|PPDFS The one true PPDFS Instance.
  */
-function Protected_PDFS() {
-	return Protected_PDFS::instance();
+function ppdfs() {
+	return PPDFS::instance();
 }
 
-// Get Protected_PDFS Running.
-Protected_PDFS();
+// Get PPDFS Running.
+ppdfs();
