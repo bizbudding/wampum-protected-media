@@ -105,17 +105,20 @@
 }
 
 .ppdf-close-bar {
-	background-color: #000;
+	background-color: rgba(0,0,0,0.75);
 	color: #fff;
 	text-align: right;
-	padding: 8px 24px;
+	padding: 8px 8px;
+	position: absolute;
+	right: 3px;
+	top: 34px;
 }
 
 #ppdf-close {
 	position: relative;
 	display: block;
-	width: 50px;
-	height: 50px;
+	width: 60px;
+	height: 60px;
 	margin-left: auto;
 	background: transparent;
 	color: transparent;
