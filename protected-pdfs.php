@@ -3,7 +3,7 @@
  * Plugin Name:       Protected PDFs
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.0.0
+ * Version:           1.0.1
  *
  * Author:            BizBudding, Mike Hemberger
  * Author URI:        https://bizbudding.com
@@ -95,7 +95,7 @@ final class PPDFS {
 
 		// Plugin version.
 		if ( ! defined( 'PPDFS_VERSION' ) ) {
-			define( 'PPDFS_VERSION', '1.0.0' );
+			define( 'PPDFS_VERSION', '1.0.1' );
 		}
 
 		// Plugin Folder Path.
@@ -157,6 +157,7 @@ final class PPDFS {
 	}
 
 	public function init() {
+		$this->field_group();
 		/**
 		 * Setup the updater.
 		 *
@@ -273,7 +274,7 @@ final class PPDFS {
 		// Get the file URL.
 		$file = wp_get_attachment_url( $value );
 		// If the file doesn't contain the 'protected_pdfs' directory, it's not protected.
-		if ( false !== strpos( $file, 'protected_pdfs' ) ) {
+		if ( false === strpos( $file, 'protected_pdfs' ) ) {
 			// Error message.
 			$valid = 'This PDF is not in the protected_pdfs directory and may not be protected. Please upload a new file or choose one from the protected_pdfs directory.';
 		}
@@ -322,9 +323,14 @@ final class PPDFS {
 
 			foreach ( $items as $item ) {
 
+				// Skip if no file.
+				if ( ! $item['file'] ) {
+					continue;
+				}
+
 				// File URL.
-				$file_url = wp_get_attachment_url( $item['file'] );
-				$file_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', PPDFS_PLUGIN_URL, $file_url ) );
+				$direct_url = wp_get_attachment_url( $item['file'] );
+				$file_url   = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', PPDFS_PLUGIN_URL, $direct_url ) );
 
 				// Image.
 				$image = '<span class="ppdf-cell ppdf-image ppdf-launcher"></span>';
@@ -342,6 +348,9 @@ final class PPDFS {
 						esc_attr( $item['title'] ),
 						esc_html( $item['title'] )
 					);
+				} else {
+					// Use filename as title.
+					$title = basename( $direct_url );
 				}
 
 				// Description.
@@ -630,18 +639,18 @@ final class PPDFS {
 		if ( $post_types ) {
 			$config = array();
 			foreach ( $post_types as $post_type ) {
-				$config[] = array(
+				$config[] = array( array(
 					'param'    => 'post_type',
 					'operator' => '==',
 					'value'    => $post_type,
-				);
+				) );
 			}
 		}
 		return $config;
 	}
 
 	public function get_metabox_post_types() {
-		$post_types = get_post_types( array('public' => true ), 'names' );
+		$post_types = get_post_types( array( 'public' => true ), 'names' );
 		$post_types = apply_filters( 'ppdfs_post_types', $post_types );
 		return (array) $post_types;
 	}
