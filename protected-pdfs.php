@@ -138,19 +138,19 @@ final class PPDFS {
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
 		add_action( 'plugins_loaded',        array( $this, 'init' ) );
+		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
 		add_action( 'after_setup_theme',     array( $this, 'image_size' ) );
 		add_action( 'genesis_entry_content', array( $this, 'display' ) );
 	}
 
-	public function filters() {
-		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', array( $this, 'upload_prefilter' ) );
-		// add_filter( 'acf/prepare_field/key=field_59ee1e45dc4b8',    array( $this, 'field_display' ) ); // Not sure if this is needed.
-
-	}
-
 	public function activate() {
 		flush_rewrite_rules();
+	}
+
+	public function filters() {
+		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', array( $this, 'upload_prefilter' ) );
+		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
 	}
 
 	public function init() {
@@ -167,6 +167,83 @@ final class PPDFS {
 		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/protected-pdfs/', __FILE__, 'protected-pdfs' );
 	}
 
+	/**
+	 * Creates blank index.php and .htaccess files
+	 *
+	 * This function runs approximately once per month in order to ensure all folders
+	 * have their necessary protection files.
+	 *
+	 * Take from edd_create_protection_files() in https://github.com/easydigitaldownloads/easy-digital-downloads/blob/master/includes/admin/upload-functions.php.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param bool $force
+	 */
+	function create_protection_files( $force = false ) {
+		if ( false === get_transient( 'ppdfs_check_protection_files' ) || $force ) {
+			$upload_path = $this->get_upload_dir();
+			// Make sure the /protected-pdfs/ folder is created
+			wp_mkdir_p( $upload_path );
+			// Top level .htaccess file
+			$rules = $this->get_htaccess_rules();
+			if ( $this->htaccess_exists() ) {
+				$contents = @file_get_contents( $upload_path . '/.htaccess' );
+				if ( $contents !== $rules || ! $contents ) {
+					// Update the .htaccess rules if they don't match
+					@file_put_contents( $upload_path . '/.htaccess', $rules );
+				}
+			} elseif( wp_is_writable( $upload_path ) ) {
+				// Create the file if it doesn't exist
+				@file_put_contents( $upload_path . '/.htaccess', $rules );
+			}
+			// Top level blank index.php
+			if ( ! file_exists( $upload_path . '/index.php' ) && wp_is_writable( $upload_path ) ) {
+				@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
+			}
+			// Check for the files once per day
+			set_transient( 'ppdfs_check_protection_files', true, 3600 * 24 );
+		}
+	}
+
+	/**
+	 * Retrieve the absolute path to the file upload directory without the trailing slash
+	 *
+	 * @since  1.8
+	 * @return string $path Absolute path to the EDD upload directory
+	 */
+	function get_upload_dir() {
+		$wp_upload_dir = wp_upload_dir();
+		wp_mkdir_p( $wp_upload_dir['basedir'] . '/protected_pdfs' );
+		$path = $wp_upload_dir['basedir'] . '/protected_pdfs';
+		return $path;
+	}
+
+	/**
+	 * Retrieve the .htaccess rules to wp-content/uploads/edd/
+	 *
+	 * @since 1.6
+	 *
+	 * @return mixed|void The htaccess rules
+	 */
+	function get_htaccess_rules() {
+		$rules = '';
+		$rules .= "RewriteEngine On\n";
+		$rules .= "RewriteCond %{HTTP_REFERER} !^" . trailingslashit( home_url() ) . ".*$ [NC]\n";
+		$rules .= "RewriteRule \.(pdf)$ - [NC,L,F]\n";
+		return $rules;
+	}
+
+	/**
+	 * Checks if the .htaccess file exists in wp-content/uploads/edd
+	 *
+	 * @since 1.8
+	 * @return bool
+	 */
+	function htaccess_exists() {
+		$upload_path = $this->get_upload_dir();
+		return file_exists( $upload_path . '/.htaccess' );
+	}
+
 	// Register scripts for later enqueue.
 	public function register_scripts() {
 		wp_register_style( 'protected-pdfs', PPDFS_PLUGIN_URL . 'assets/css/protected-pdfs.css', array(), PPDFS_VERSION );
@@ -174,15 +251,8 @@ final class PPDFS {
 
 	// Change the upload directory.
 	public function upload_prefilter( $errors, $file, $field ) {
-		add_filter( 'upload_dir', array( $this, 'upload_directory' ) );
+		add_filter( 'upload_dir',  array( $this, 'upload_directory' ) );
 		return $errors;
-	}
-
-	// Update paths accordingly before displaying link to file. Currently unused.
-	public function field_display( $field ) {
-		// get_home_path();
-		add_filter( 'upload_dir', array( $this, 'upload_directory' ) );
-		return $field;
 	}
 
 	public function upload_directory( $param ){
@@ -192,14 +262,29 @@ final class PPDFS {
 		return $param;
 	}
 
+	public function validate_value( $valid, $value, $field, $input ){
+		// Bail if already invalid.
+		if( ! $valid ) {
+			return $valid;
+		}
+		// Get the file URL.
+		$file = wp_get_attachment_url( $value );
+		// If the file doesn't contain the 'protected_pdfs' directory, it's not protected.
+		if ( false !== strpos( $file, 'protected_pdfs' ) ) {
+			// Error message.
+			$valid = 'This PDF is not in the protected_pdfs directory and may not be protected. Please upload a new file or choose one from the protected_pdfs directory.';
+		}
+		return $valid;
+	}
+
 	public function image_size() {
 		add_image_size( 'vertical-thumb', 150, 210, true );
 	}
 
 	public function display() {
 
-		// Bail if not a single post.
-		if ( ! is_singular() ) {
+		// Bail if not a post type for ppdfs.
+		if ( ! is_singular( $this->get_metabox_post_types() ) ) {
 			return;
 		}
 
@@ -491,7 +576,7 @@ final class PPDFS {
 								'id'    => '',
 							),
 							'return_format' => 'id',
-							'preview_size'  => 'thumbnail',
+							'preview_size'  => 'vertical-thumb',
 							'library'       => 'all',
 							'min_width'     => '',
 							'min_height'    => '',
@@ -524,15 +609,7 @@ final class PPDFS {
 					),
 				),
 			),
-			'location' => array (
-				array (
-					array (
-						'param'    => 'post_type',
-						'operator' => '==',
-						'value'    => 'post',
-					),
-				),
-			),
+			'location'              => $this->get_metabox_post_types_config(),
 			'menu_order'            => 0,
 			'position'              => 'normal',
 			'style'                 => 'default',
@@ -542,6 +619,28 @@ final class PPDFS {
 			'active'                => 1,
 			'description'           => '',
 		));
+	}
+
+	public function get_metabox_post_types_config() {
+		$config     = '';
+		$post_types = $this->get_metabox_post_types();
+		if ( $post_types ) {
+			$config = array();
+			foreach ( $post_types as $post_type ) {
+				$config[] = array(
+					'param'    => 'post_type',
+					'operator' => '==',
+					'value'    => $post_type,
+				);
+			}
+		}
+		return $config;
+	}
+
+	public function get_metabox_post_types() {
+		$post_types = get_post_types( array('public' => true ), 'names' );
+		$post_types = apply_filters( 'ppdfs_post_types', $post_types );
+		return (array) $post_types;
 	}
 
 }

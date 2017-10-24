@@ -78,7 +78,7 @@
                             "id": ""
                         },
                         "return_format": "id",
-                        "preview_size": "thumbnail",
+                        "preview_size": "vertical-thumb",
                         "library": "all",
                         "min_width": "",
                         "min_height": "",
