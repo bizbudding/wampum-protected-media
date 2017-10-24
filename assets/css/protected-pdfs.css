@@ -1,0 +1,152 @@
+#ppdf-viewer {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	top: 0;
+	left: 0;
+	z-index: 99999;
+}
+.admin-bar #ppdf-viewer {
+	top: 32px;
+}
+@media only screen and (max-width: 782px) {
+	.admin-bar #ppdf-viewer {
+		top: 46px;
+	}
+}
+
+/* Flexbox Tables
+--------------------------------------------- */
+
+#ppdf-list {
+	border: 1px solid rgba(0,0,0,0.05);
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.ppdf-row,
+.entry-content .ppdf-row {
+	display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: center;-webkit-box-align: center;align-items: center;
+	border-bottom: 1px solid rgba(0,0,0,0.05);
+	padding: 0;
+	margin: 0;
+}
+
+.ppdf-row:last-of-type {
+	border-bottom: 0;
+}
+
+.ppdf-cell {
+	padding: 10px;
+}
+
+.ppdf-auto {
+	-webkit-box-flex: 0;-ms-flex: 0 0 auto;flex: 0 0 auto;
+}
+
+.ppdf-grow {
+	-webkit-box-flex: 1;-ms-flex: 1 1 auto;flex: 1 1 auto;
+}
+
+.ppdf-image {
+	width: 100%;
+	max-width: 140px;
+}
+
+.ppdf-image .wp-post-image,
+.entry-content .ppdf-image .wp-post-image {
+	display: block;
+	margin: 0;
+}
+
+.ppdf-title {
+	font-size: 18px;
+	line-height: 1.4;
+}
+
+.ppdf-desc {
+	font-size: 14px;
+	margin-top: 6px;
+}
+
+.ppdf-title,
+.ppdf-desc {
+	display: block;
+}
+
+.ppdf-header {
+	width: 100%;
+	background-color: rgba(0,0,0,0.05);
+	font-weight: bold;
+	padding: 8px 20px;
+}
+
+.button.ppdf-button,
+.entry-content .button.ppdf-button {
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1;
+	padding: .618em 1em;
+	white-space: nowrap;
+	margin: 2px;
+}
+
+@media only screen and (max-width: 668px) {
+
+	.ppdf-row,
+	.ppdf-cell {
+		-ms-flex-wrap: wrap;flex-wrap: wrap;
+	}
+
+	.ppdf-cell {
+		width: 100%;
+	}
+
+}
+
+.ppdf-close-bar {
+	background-color: #000;
+	color: #fff;
+	text-align: right;
+	padding: 12px 24px;
+}
+
+#ppdf-close {
+	position: relative;
+	display: block;
+	width: 30px;
+	height: 30px;
+	margin-left: auto;
+	background: transparent;
+	color: transparent;
+	border: none;
+	-webkit-box-shadow: none;box-shadow: none;
+}
+
+#ppdf-close::before,
+#ppdf-close::after {
+	background: #fff;
+	content: '';
+	position: absolute;
+	height: 2px;
+	width: 100%;
+	top: 50%;
+	left: 0;
+	margin-top: -1px;
+}
+
+#ppdf-close:hover {
+	cursor: pointer;
+}
+
+#ppdf-close:hover::before,
+#ppdf-close:hover::after {
+	background: #fff;
+}
+
+#ppdf-close::before {
+	-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);
+}
+#ppdf-close::after {
+	-webkit-transform: rotate(-45deg);-ms-transform: rotate(-45deg);transform: rotate(-45deg);
+}
