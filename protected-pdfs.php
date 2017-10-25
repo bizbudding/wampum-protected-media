@@ -3,7 +3,7 @@
  * Plugin Name:       Protected PDFs
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.0.3
+ * Version:           1.0.4
  *
  * Author:            BizBudding, Mike Hemberger
  * Author URI:        https://bizbudding.com
@@ -95,7 +95,7 @@ final class PPDFS {
 
 		// Plugin version.
 		if ( ! defined( 'PPDFS_VERSION' ) ) {
-			define( 'PPDFS_VERSION', '1.0.3' );
+			define( 'PPDFS_VERSION', '1.0.4' );
 		}
 
 		// Plugin Folder Path.
@@ -145,7 +145,7 @@ final class PPDFS {
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
 		add_action( 'after_setup_theme',     array( $this, 'image_size' ) );
-		add_action( 'genesis_entry_content', array( $this, 'display' ) );
+		add_action( 'genesis_entry_content', array( $this, 'display' ), 20 );
 	}
 
 	public function activate() {

@@ -1,3 +1,7 @@
+#### 1.0.4
+* Changed: Move file display to later priority on genesis_entry_content hook.
+* Changed: More seemless close button in PDFs.
+
 #### 1.0.3
 * Fixed: jQuery when swapping PDF iframe src to load a different file.
 
