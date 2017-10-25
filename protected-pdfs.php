@@ -385,7 +385,9 @@ final class PPDFS {
 					$( '#ppdf-list' ).on( 'click', '.ppdf-launcher', function(e) {
 						e.preventDefault();
 						var src = $(this).attr( 'ppdf' );
-						viewer.find( 'iframe' ).attr( 'src', src );
+						if ( src != viewer.find( 'iframe' ).attr( 'src' ) ) {
+							viewer.find( 'iframe' ).attr( 'src', src );
+						}
 						viewer.show();
 						$(document).keydown(function(e) {
 							switch(e.which) {

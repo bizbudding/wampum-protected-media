@@ -1,3 +1,6 @@
+#### 1.0.5
+* Changed: Don't swamp iframe src if opening the same pdf that is already loaded.
+
 #### 1.0.4
 * Changed: Move file display to later priority on genesis_entry_content hook.
 * Changed: More seemless close button in PDFs.
