@@ -145,7 +145,7 @@ final class PPDFS {
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
 		add_action( 'after_setup_theme',     array( $this, 'image_size' ) );
-		add_action( 'genesis_entry_content', array( $this, 'display' ) );
+		add_action( 'genesis_entry_content', array( $this, 'display' ), 20 );
 	}
 
 	public function activate() {
