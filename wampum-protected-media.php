@@ -312,10 +312,10 @@ final class Wampum_Protected_Media {
 		// Enqueue styles.
 		wp_enqueue_style( 'wampum-protected-media' );
 
-		echo '<ul id="maipm-list" style="margin-left:0;">';
+		echo '<ul id="wpm-list" style="margin-left:0;">';
 
-			echo '<li class="maipm-row">';
-				echo '<span class="maipm-header">Files</span>';
+			echo '<li class="wpm-row">';
+				echo '<span class="wpm-header">Files</span>';
 			echo '</li>';
 
 			$has_pdf   = false;
@@ -349,14 +349,14 @@ final class Wampum_Protected_Media {
 				// Maybe add launcher class to the item.
 				$launcher_class = '';
 				if ( $is_pdf ) {
-					$launcher_class = ' maipm-launcher';
+					$launcher_class = ' wpm-launcher';
 				}
 
 				// Image.
-				$image = sprintf( '<span class="maipm-cell maipm-image%s"></span>', $launcher_class );
+				$image = sprintf( '<span class="wpm-cell wpm-image%s"></span>', $launcher_class );
 				if ( $item['image'] ) {
-					$image_size = apply_filters( 'maipm_image_size', 'thumbnail' );
-					$image      = sprintf( '<a href="%s" class="maipm-cell maipm-image%s">%s</a>',
+					$image_size = apply_filters( 'wampum_protected_media_image_size', 'thumbnail' );
+					$image      = sprintf( '<a href="%s" class="wpm-cell wpm-image%s">%s</a>',
 						$file_url,
 						$launcher_class,
 						wp_get_attachment_image( $item['image'], $image_size )
@@ -370,18 +370,18 @@ final class Wampum_Protected_Media {
 					// Use filename as title.
 					$title = basename( $direct_url );
 				}
-				$title = sprintf( '<span class="maipm-title"><a href="%s" class="%s">%s</a> (%s)</span>', $file_url, trim( $launcher_class ), $title, $ext );
+				$title = sprintf( '<span class="wpm-title"><a href="%s" class="%s">%s</a> (%s)</span>', $file_url, trim( $launcher_class ), $title, $ext );
 
 				// Description.
 				$desc = '';
 				if ( $item['desc'] ) {
-					$desc = sprintf( '<span class="maipm-desc">%s</span>',
+					$desc = sprintf( '<span class="wpm-desc">%s</span>',
 						wp_kses_post( $item['desc'] )
 					);
 				}
 
 				// Content: Title and/or Desc.
-				$content = sprintf( '<span class="maipm-cell maipm-grow maipm-content">%s</span>',
+				$content = sprintf( '<span class="wpm-cell wpm-grow wpm-content">%s</span>',
 					$title . $desc
 				);
 
@@ -390,22 +390,22 @@ final class Wampum_Protected_Media {
 				if ( 'zip' === $ext ) {
 					$button_text = __( 'Download', 'wampum-protected-media' );
 				}
-				$actions = sprintf( '<span class="maipm-cell maipm-auto maipm-actions"><a href="%s" class="maipm-button more-link%s">%s</a></span>', $file_url, $launcher_class, $button_text );
+				$actions = sprintf( '<span class="wpm-cell wpm-auto wpm-actions"><a href="%s" class="wpm-button more-link%s">%s</a></span>', $file_url, $launcher_class, $button_text );
 
 				// Output the row.
-				printf( '<li class="maipm-row">%s%s%s</li>', $image, $content, $actions );
+				printf( '<li class="wpm-row">%s%s%s</li>', $image, $content, $actions );
 
 			}
 
 			if ( $has_pdf ) {
-				echo '<div style="display:none;" id="maipm-viewer">
-						<div class="maipm-close-bar"><button id="maipm-close"><span class="screen-reader-text">Close</span></button></div>
+				echo '<div style="display:none;" id="wpm-viewer">
+						<div class="wpm-close-bar"><button id="wpm-close"><span class="screen-reader-text">Close</span></button></div>
 						<iframe width="100%" height="100%" src="' . $first_pdf . '"></iframe>
 					</div>';
 				echo "<script type='text/javascript'>
 					(function($) {
-						var viewer = $( '#maipm-viewer' );
-						$( '#maipm-list' ).on( 'click', '.maipm-launcher', function(e) {
+						var viewer = $( '#wpm-viewer' );
+						$( '#wpm-list' ).on( 'click', '.wpm-launcher', function(e) {
 							e.preventDefault();
 							var src = $(this).attr( 'ppdf' );
 							if ( src != viewer.find( 'iframe' ).attr( 'src' ) ) {
@@ -420,7 +420,7 @@ final class Wampum_Protected_Media {
 									default: return;
 								}
 							});
-							viewer.on( 'click', '#maipm-close', function(f) {
+							viewer.on( 'click', '#wpm-close', function(f) {
 								viewer.hide();
 							});
 						});
@@ -677,7 +677,7 @@ final class Wampum_Protected_Media {
 
 	public function get_metabox_post_types() {
 		$post_types = get_post_types( array( 'public' => true ), 'names' );
-		$post_types = apply_filters( 'ppdfs_post_types', $post_types );
+		$post_types = apply_filters( 'wampum_protected_media_post_types', $post_types );
 		return (array) $post_types;
 	}
 

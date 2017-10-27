@@ -1,4 +1,4 @@
-#maipm-viewer {
+#wpm-viewer {
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
@@ -6,11 +6,11 @@
 	left: 0;
 	z-index: 99999;
 }
-.admin-bar #maipm-viewer {
+.admin-bar #wpm-viewer {
 	top: 32px;
 }
 @media only screen and (max-width: 782px) {
-	.admin-bar #maipm-viewer {
+	.admin-bar #wpm-viewer {
 		top: 46px;
 	}
 }
@@ -18,71 +18,71 @@
 /* Flexbox Tables
 --------------------------------------------- */
 
-#maipm-list {
+#wpm-list {
 	border: 1px solid rgba(0,0,0,0.05);
 	border-radius: 4px;
 	overflow: hidden;
 }
 
-.maipm-row,
-.entry-content .maipm-row {
+.wpm-row,
+.entry-content .wpm-row {
 	display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: center;-webkit-box-align: center;align-items: center;
 	border-bottom: 1px solid rgba(0,0,0,0.05);
 	padding: 0;
 	margin: 0;
 }
 
-.maipm-row:last-of-type {
+.wpm-row:last-of-type {
 	border-bottom: 0;
 }
 
-.maipm-cell {
+.wpm-cell {
 	padding: 10px;
 }
 
-.maipm-auto {
+.wpm-auto {
 	-webkit-box-flex: 0;-ms-flex: 0 0 auto;flex: 0 0 auto;
 }
 
-.maipm-grow {
+.wpm-grow {
 	-webkit-box-flex: 1;-ms-flex: 1 1 auto;flex: 1 1 auto;
 }
 
-.maipm-image {
+.wpm-image {
 	width: 100%;
 	max-width: 140px;
 }
 
-.maipm-image .wp-post-image,
-.entry-content .maipm-image .wp-post-image {
+.wpm-image .wp-post-image,
+.entry-content .wpm-image .wp-post-image {
 	display: block;
 	margin: 0;
 }
 
-.maipm-title {
+.wpm-title {
 	font-size: 18px;
 	line-height: 1.4;
 }
 
-.maipm-desc {
+.wpm-desc {
 	font-size: 14px;
 	margin-top: 6px;
 }
 
-.maipm-title,
-.maipm-desc {
+.wpm-title,
+.wpm-desc {
 	display: block;
 }
 
-.maipm-header {
+.wpm-header {
 	width: 100%;
 	background-color: rgba(0,0,0,0.05);
 	font-weight: bold;
 	padding: 8px 20px;
 }
 
-.button.maipm-button,
-.entry-content .button.maipm-button {
+.button.wpm-button,
+.entry-content .button.wpm-button {
 	font-size: 14px;
 	font-weight: 700;
 	line-height: 1;
@@ -93,25 +93,25 @@
 
 @media only screen and (max-width: 668px) {
 
-	.maipm-row,
-	.maipm-cell {
+	.wpm-row,
+	.wpm-cell {
 		-ms-flex-wrap: wrap;flex-wrap: wrap;
 	}
 
-	.maipm-cell {
+	.wpm-cell {
 		width: 100%;
 	}
 
 }
 
-.maipm-close-bar {
+.wpm-close-bar {
 	text-align: right;
 	position: absolute;
 	right: 3px;
 	top: 34px;
 }
 
-#maipm-close {
+#wpm-close {
 	position: relative;
 	display: block;
 	width: 60px;
@@ -123,8 +123,8 @@
 	-webkit-box-shadow: none;box-shadow: none;
 }
 
-#maipm-close::before,
-#maipm-close::after {
+#wpm-close::before,
+#wpm-close::after {
 	background: #e4e4e4;
 	content: '';
 	position: absolute;
@@ -135,20 +135,20 @@
 	margin-top: -1px;
 }
 
-#maipm-close:hover {
+#wpm-close:hover {
 	cursor: pointer;
 	background-color: #000;
 }
 
-#maipm-close:hover::before,
-#maipm-close:hover::after {
+#wpm-close:hover::before,
+#wpm-close:hover::after {
 	background: #fff;
 	color: #fff;
 }
 
-#maipm-close::before {
+#wpm-close::before {
 	-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);
 }
-#maipm-close::after {
+#wpm-close::after {
 	-webkit-transform: rotate(-45deg);-ms-transform: rotate(-45deg);transform: rotate(-45deg);
 }
