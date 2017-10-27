@@ -1,4 +1,4 @@
-#ppdf-viewer {
+#maipm-viewer {
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
@@ -6,11 +6,11 @@
 	left: 0;
 	z-index: 99999;
 }
-.admin-bar #ppdf-viewer {
+.admin-bar #maipm-viewer {
 	top: 32px;
 }
 @media only screen and (max-width: 782px) {
-	.admin-bar #ppdf-viewer {
+	.admin-bar #maipm-viewer {
 		top: 46px;
 	}
 }
@@ -18,71 +18,71 @@
 /* Flexbox Tables
 --------------------------------------------- */
 
-#ppdf-list {
+#maipm-list {
 	border: 1px solid rgba(0,0,0,0.05);
 	border-radius: 4px;
 	overflow: hidden;
 }
 
-.ppdf-row,
-.entry-content .ppdf-row {
+.maipm-row,
+.entry-content .maipm-row {
 	display: -ms-flexbox;display: -webkit-box;display: flex;-ms-flex-align: center;-webkit-box-align: center;align-items: center;
 	border-bottom: 1px solid rgba(0,0,0,0.05);
 	padding: 0;
 	margin: 0;
 }
 
-.ppdf-row:last-of-type {
+.maipm-row:last-of-type {
 	border-bottom: 0;
 }
 
-.ppdf-cell {
+.maipm-cell {
 	padding: 10px;
 }
 
-.ppdf-auto {
+.maipm-auto {
 	-webkit-box-flex: 0;-ms-flex: 0 0 auto;flex: 0 0 auto;
 }
 
-.ppdf-grow {
+.maipm-grow {
 	-webkit-box-flex: 1;-ms-flex: 1 1 auto;flex: 1 1 auto;
 }
 
-.ppdf-image {
+.maipm-image {
 	width: 100%;
 	max-width: 140px;
 }
 
-.ppdf-image .wp-post-image,
-.entry-content .ppdf-image .wp-post-image {
+.maipm-image .wp-post-image,
+.entry-content .maipm-image .wp-post-image {
 	display: block;
 	margin: 0;
 }
 
-.ppdf-title {
+.maipm-title {
 	font-size: 18px;
 	line-height: 1.4;
 }
 
-.ppdf-desc {
+.maipm-desc {
 	font-size: 14px;
 	margin-top: 6px;
 }
 
-.ppdf-title,
-.ppdf-desc {
+.maipm-title,
+.maipm-desc {
 	display: block;
 }
 
-.ppdf-header {
+.maipm-header {
 	width: 100%;
 	background-color: rgba(0,0,0,0.05);
 	font-weight: bold;
 	padding: 8px 20px;
 }
 
-.button.ppdf-button,
-.entry-content .button.ppdf-button {
+.button.maipm-button,
+.entry-content .button.maipm-button {
 	font-size: 14px;
 	font-weight: 700;
 	line-height: 1;
@@ -93,41 +93,38 @@
 
 @media only screen and (max-width: 668px) {
 
-	.ppdf-row,
-	.ppdf-cell {
+	.maipm-row,
+	.maipm-cell {
 		-ms-flex-wrap: wrap;flex-wrap: wrap;
 	}
 
-	.ppdf-cell {
+	.maipm-cell {
 		width: 100%;
 	}
 
 }
 
-.ppdf-close-bar {
-	background-color: rgba(0,0,0,0.75);
-	color: #fff;
+.maipm-close-bar {
 	text-align: right;
-	padding: 8px 8px;
 	position: absolute;
 	right: 3px;
 	top: 34px;
 }
 
-#ppdf-close {
+#maipm-close {
 	position: relative;
 	display: block;
 	width: 60px;
 	height: 60px;
 	margin-left: auto;
-	background: transparent;
-	color: transparent;
+	background-color: rgba(0,0,0,0.6);
+	color: #fff;
 	border: none;
 	-webkit-box-shadow: none;box-shadow: none;
 }
 
-#ppdf-close::before,
-#ppdf-close::after {
+#maipm-close::before,
+#maipm-close::after {
 	background: #e4e4e4;
 	content: '';
 	position: absolute;
@@ -138,20 +135,20 @@
 	margin-top: -1px;
 }
 
-#ppdf-close:hover {
+#maipm-close:hover {
 	cursor: pointer;
-	background-color: #323232;
+	background-color: #000;
 }
 
-#ppdf-close:hover::before,
-#ppdf-close:hover::after {
+#maipm-close:hover::before,
+#maipm-close:hover::after {
 	background: #fff;
 	color: #fff;
 }
 
-#ppdf-close::before {
+#maipm-close::before {
 	-webkit-transform: rotate(45deg);-ms-transform: rotate(45deg);transform: rotate(45deg);
 }
-#ppdf-close::after {
+#maipm-close::after {
 	-webkit-transform: rotate(-45deg);-ms-transform: rotate(-45deg);transform: rotate(-45deg);
 }

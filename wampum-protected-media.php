@@ -1,53 +1,56 @@
 <?php
 /**
- * Plugin Name:       Protected PDFs
+ * Plugin Name:       Wampum - Protected Media
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
  * Version:           1.0.5
  *
- * Author:            BizBudding, Mike Hemberger
+ * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
  *
- * GitHub Plugin URI: bizbudding/protected-pdfs
- * GitHub Plugin URI: https://github.com/bizbudding/protected-pdfs
+ * GitHub Plugin URI: bizbudding/wampum-protected-media
+ * GitHub Plugin URI: https://github.com/bizbudding/wampum-protected-media
  */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'PPDFS' ) ) :
+if ( ! class_exists( 'Wampum_Protected_Media' ) ) :
 
 /**
- * Main PPDFS Class.
+ * Main Wampum_Protected_Media Class.
  *
  * @since 1.0.0
  */
-final class PPDFS {
+final class Wampum_Protected_Media {
 
 	/**
-	 * @var PPDFS The one true PPDFS
+	 * @var Wampum_Protected_Media The one true Wampum_Protected_Media
 	 * @since 1.0.0
 	 */
 	private static $instance;
 
+	public $key_name       = 'wampum_protected_media';
+	public $directory_name = 'wampum_protected_uploads';
+
 	/**
-	 * Main PPDFS Instance.
+	 * Main Wampum_Protected_Media Instance.
 	 *
-	 * Insures that only one instance of PPDFS exists in memory at any one
+	 * Insures that only one instance of Wampum_Protected_Media exists in memory at any one
 	 * time. Also prevents needing to define globals all over the place.
 	 *
 	 * @since   1.0.0
 	 * @static  var array $instance
-	 * @uses    PPDFS::setup_constants() Setup the constants needed.
-	 * @uses    PPDFS::includes() Include the required files.
-	 * @uses    PPDFS::setup() Activate, deactivate, etc.
+	 * @uses    Wampum_Protected_Media::setup_constants() Setup the constants needed.
+	 * @uses    Wampum_Protected_Media::includes() Include the required files.
+	 * @uses    Wampum_Protected_Media::setup() Activate, deactivate, etc.
 	 * @see     ppdfs()
-	 * @return  object | PPDFS The one true PPDFS
+	 * @return  object | Wampum_Protected_Media The one true Wampum_Protected_Media
 	 */
 	public static function instance() {
 		if ( ! isset( self::$instance ) ) {
 			// Setup the setup
-			self::$instance = new PPDFS;
+			self::$instance = new Wampum_Protected_Media;
 			// Methods
 			self::$instance->setup_constants();
 			self::$instance->includes();
@@ -69,7 +72,7 @@ final class PPDFS {
 	 */
 	public function __clone() {
 		// Cloning instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'protected-pdfs' ), '1.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wampum-protected-media' ), '1.0' );
 	}
 
 	/**
@@ -81,7 +84,7 @@ final class PPDFS {
 	 */
 	public function __wakeup() {
 		// Unserializing instances of the class is forbidden.
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'protected-pdfs' ), '1.0' );
+		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wampum-protected-media' ), '1.0' );
 	}
 
 	/**
@@ -94,33 +97,33 @@ final class PPDFS {
 	private function setup_constants() {
 
 		// Plugin version.
-		if ( ! defined( 'PPDFS_VERSION' ) ) {
-			define( 'PPDFS_VERSION', '1.0.5' );
+		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
+			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.0.5' );
 		}
 
 		// Plugin Folder Path.
-		if ( ! defined( 'PPDFS_PLUGIN_DIR' ) ) {
-			define( 'PPDFS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_DIR' ) ) {
+			define( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 		}
 
 		// Plugin Includes Path
-		// if ( ! defined( 'PPDFS_INCLUDES_DIR' ) ) {
-		// 	define( 'PPDFS_INCLUDES_DIR', PPDFS_PLUGIN_DIR . 'includes/' );
+		// if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_INCLUDES_DIR' ) ) {
+		// 	define( 'WAMPUM_PROTECTED_MEDIA_INCLUDES_DIR', WAMPUM_PROTECTED_MEDIA_PLUGIN_DIR . 'includes/' );
 		// }
 
 		// Plugin Folder URL.
-		if ( ! defined( 'PPDFS_PLUGIN_URL' ) ) {
-			define( 'PPDFS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_URL' ) ) {
+			define( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 		}
 
 		// Plugin Root File.
-		if ( ! defined( 'PPDFS_PLUGIN_FILE' ) ) {
-			define( 'PPDFS_PLUGIN_FILE', __FILE__ );
+		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_FILE' ) ) {
+			define( 'WAMPUM_PROTECTED_MEDIA_PLUGIN_FILE', __FILE__ );
 		}
 
 		// Plugin Base Name
-		if ( ! defined( 'PPDFS_BASENAME' ) ) {
-			define( 'PPDFS_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
+		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_BASENAME' ) ) {
+			define( 'WAMPUM_PROTECTED_MEDIA_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
 		}
 
 	}
@@ -133,7 +136,7 @@ final class PPDFS {
 	 * @return  void
 	 */
 	private function includes() {
-		// foreach ( glob( PPDFS_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
+		// foreach ( glob( WAMPUM_PROTECTED_MEDIA_INCLUDES_DIR . '*.php' ) as $file ) { include $file; }
 	}
 
 	public function hooks() {
@@ -144,7 +147,6 @@ final class PPDFS {
 		add_action( 'init',                  array( $this, 'field_group' ) );
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
-		add_action( 'after_setup_theme',     array( $this, 'image_size' ) );
 		add_action( 'genesis_entry_content', array( $this, 'display' ), 20 );
 	}
 
@@ -168,7 +170,7 @@ final class PPDFS {
 		if ( ! class_exists( 'Puc_v4_Factory' ) ) {
 			require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php';
 		}
-		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/protected-pdfs/', __FILE__, 'protected-pdfs' );
+		$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'wampum-protected-media' );
 	}
 
 	/**
@@ -184,9 +186,9 @@ final class PPDFS {
 	 * @param bool $force
 	 */
 	function create_protection_files( $force = false ) {
-		if ( false === get_transient( 'ppdfs_check_protection_files' ) || $force ) {
+		if ( false === get_transient( 'wampum_check_protection_files' ) || $force ) {
 			$upload_path = $this->get_upload_dir();
-			// Make sure the /protected-pdfs/ folder is created
+			// Make sure the upload directory is created
 			wp_mkdir_p( $upload_path );
 			// Top level .htaccess file
 			$rules = $this->get_htaccess_rules();
@@ -205,7 +207,7 @@ final class PPDFS {
 				@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
 			}
 			// Check for the files once per day
-			set_transient( 'ppdfs_check_protection_files', true, 3600 * 24 );
+			set_transient( 'wampum_check_protection_files', true, 3600 * 24 );
 		}
 	}
 
@@ -217,8 +219,8 @@ final class PPDFS {
 	 */
 	function get_upload_dir() {
 		$wp_upload_dir = wp_upload_dir();
-		wp_mkdir_p( $wp_upload_dir['basedir'] . '/protected_pdfs' );
-		$path = $wp_upload_dir['basedir'] . '/protected_pdfs';
+		wp_mkdir_p( $wp_upload_dir['basedir'] . '/' . $this->directory_name );
+		$path = $wp_upload_dir['basedir'] . '/' . $this->directory_name;
 		return $path;
 	}
 
@@ -233,7 +235,7 @@ final class PPDFS {
 		$rules = '';
 		$rules .= "RewriteEngine On\n";
 		$rules .= "RewriteCond %{HTTP_REFERER} !^" . trailingslashit( home_url() ) . ".*$ [NC]\n";
-		$rules .= "RewriteRule \.(pdf)$ - [NC,L,F]\n";
+		$rules .= "RewriteRule .* - [NC,L,F]\n";
 		return $rules;
 	}
 
@@ -250,7 +252,7 @@ final class PPDFS {
 
 	// Register scripts for later enqueue.
 	public function register_scripts() {
-		wp_register_style( 'protected-pdfs', PPDFS_PLUGIN_URL . 'assets/css/protected-pdfs.css', array(), PPDFS_VERSION );
+		wp_register_style( 'wampum-protected-media', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL . 'assets/css/wampum-protected-media.css', array(), WAMPUM_PROTECTED_MEDIA_VERSION );
 	}
 
 	// Change the upload directory.
@@ -260,9 +262,8 @@ final class PPDFS {
 	}
 
 	public function upload_directory( $param ){
-		$new_dir = '/protected_pdfs';
-		$param['path'] = $param['basedir'] . $new_dir;
-		$param['url']  = $param['baseurl'] . $new_dir;
+		$param['path'] = $param['basedir'] . $this->directory_name;
+		$param['url']  = $param['baseurl'] . $this->directory_name;
 		return $param;
 	}
 
@@ -273,16 +274,12 @@ final class PPDFS {
 		}
 		// Get the file URL.
 		$file = wp_get_attachment_url( $value );
-		// If the file doesn't contain the 'protected_pdfs' directory, it's not protected.
-		if ( false === strpos( $file, 'protected_pdfs' ) ) {
+		// If the file doesn't contain directory name, it's not protected.
+		if ( false === strpos( $file, $this->directory_name ) ) {
 			// Error message.
-			$valid = 'This PDF is not in the protected_pdfs directory and may not be protected. Please upload a new file or choose one from the protected_pdfs directory.';
+			$valid = sprintf( 'This File is not in the %s directory and may not be protected. Please upload a new file or choose one from the %s directory.', $this->directory_name, $this->directory_name );
 		}
 		return $valid;
-	}
-
-	public function image_size() {
-		add_image_size( 'vertical-thumb', 150, 210, true );
 	}
 
 	public function display() {
@@ -305,7 +302,7 @@ final class PPDFS {
 		 * The initial $items array was the entire field group,
 		 * this grabs only the repeater field.
 		 */
-		$items = $items['protected_pdfs'];
+		$items = $items[$this->key_name];
 
 		// Bail if no items.
 		if ( ! $items ) {
@@ -313,13 +310,16 @@ final class PPDFS {
 		}
 
 		// Enqueue styles.
-		wp_enqueue_style( 'protected-pdfs' );
+		wp_enqueue_style( 'wampum-protected-media' );
 
-		echo '<ul id="ppdf-list" style="margin-left:0;">';
+		echo '<ul id="maipm-list" style="margin-left:0;">';
 
-			echo '<li class="ppdf-row">';
-				echo '<span class="ppdf-header">Files</span>';
+			echo '<li class="maipm-row">';
+				echo '<span class="maipm-header">Files</span>';
 			echo '</li>';
+
+			$has_pdf   = false;
+			$first_pdf = '';
 
 			foreach ( $items as $item ) {
 
@@ -328,81 +328,105 @@ final class PPDFS {
 					continue;
 				}
 
+				$is_pdf = false;
+
 				// File URL.
 				$direct_url = wp_get_attachment_url( $item['file'] );
-				$file_url   = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', PPDFS_PLUGIN_URL, $direct_url ) );
+				$ext        = pathinfo( $direct_url, PATHINFO_EXTENSION );
+				if ( 'pdf' === $ext ) {
+					// This file is a PDF.
+					$is_pdf   = true;
+					$file_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL, $direct_url ) );
+					// This list has a pdf.
+					if ( ! $has_pdf ) {
+						$has_pdf   = true;
+						$first_pdf = $file_url;
+					}
+				} else {
+					$file_url = $direct_url;
+				}
+
+				// Maybe add launcher class to the item.
+				$launcher_class = '';
+				if ( $is_pdf ) {
+					$launcher_class = ' maipm-launcher';
+				}
 
 				// Image.
-				$image = '<span class="ppdf-cell ppdf-image ppdf-launcher"></span>';
+				$image = sprintf( '<span class="maipm-cell maipm-image%s"></span>', $launcher_class );
 				if ( $item['image'] ) {
-					$image = sprintf( '<a href="#" class="ppdf-cell ppdf-image ppdf-launcher" ppdf="%s">%s</a>',
+					$image_size = apply_filters( 'maipm_image_size', 'thumbnail' );
+					$image      = sprintf( '<a href="%s" class="maipm-cell maipm-image%s">%s</a>',
 						$file_url,
-						wp_get_attachment_image( $item['image'], 'vertical-thumb' )
+						$launcher_class,
+						wp_get_attachment_image( $item['image'], $image_size )
 					);
 				}
 
 				// Title.
-				$title = '';
 				if ( $item['title'] ) {
-					$title = sprintf( '<span class="ppdf-title"><a href="#" class="ppdf-launcher" ppdf="%s">%s</a></span>',
-						$file_url,
-						esc_html( $item['title'] )
-					);
+					$title = esc_html( $item['title'] );
 				} else {
 					// Use filename as title.
 					$title = basename( $direct_url );
 				}
+				$title = sprintf( '<span class="maipm-title"><a href="%s" class="%s">%s</a> (%s)</span>', $file_url, trim( $launcher_class ), $title, $ext );
 
 				// Description.
 				$desc = '';
 				if ( $item['desc'] ) {
-					$desc = sprintf( '<span class="ppdf-desc">%s</span>',
+					$desc = sprintf( '<span class="maipm-desc">%s</span>',
 						wp_kses_post( $item['desc'] )
 					);
 				}
 
 				// Content: Title and/or Desc.
-				$content = sprintf( '<span class="ppdf-cell ppdf-grow ppdf-content">%s</span>',
+				$content = sprintf( '<span class="maipm-cell maipm-grow maipm-content">%s</span>',
 					$title . $desc
 				);
 
 				// Actions/buttons.
-				$actions = '<span class="ppdf-cell ppdf-auto ppdf-actions"><button class="ppdf-button ppdf-launcher more-link" ppdf="' . $file_url . '">View</button></span>';
+				$button_text = __( 'View', 'wampum-protected-media' );
+				if ( 'zip' === $ext ) {
+					$button_text = __( 'Download', 'wampum-protected-media' );
+				}
+				$actions = sprintf( '<span class="maipm-cell maipm-auto maipm-actions"><a href="%s" class="maipm-button more-link%s">%s</a></span>', $file_url, $launcher_class, $button_text );
 
 				// Output the row.
-				echo '<li class="ppdf-row">' . $image . $content . $actions . '</li>';
+				printf( '<li class="maipm-row">%s%s%s</li>', $image, $content, $actions );
 
 			}
 
-			echo '<div style="display:none;" id="ppdf-viewer">
-					<div class="ppdf-close-bar"><button id="ppdf-close"><span class="screen-reader-text">Close</span></button></div>
-					<iframe width="100%" height="100%" src="' . $file_url . '"></iframe>
-				</div>';
-
-			echo "<script type='text/javascript'>
-				(function($) {
-					var viewer = $( '#ppdf-viewer' );
-					$( '#ppdf-list' ).on( 'click', '.ppdf-launcher', function(e) {
-						e.preventDefault();
-						var src = $(this).attr( 'ppdf' );
-						if ( src != viewer.find( 'iframe' ).attr( 'src' ) ) {
-							viewer.find( 'iframe' ).attr( 'src', src );
-						}
-						viewer.show();
-						$(document).keydown(function(e) {
-							switch(e.which) {
-								case 27: // esc key.
-								viewer.hide();
-								break;
-								default: return;
+			if ( $has_pdf ) {
+				echo '<div style="display:none;" id="maipm-viewer">
+						<div class="maipm-close-bar"><button id="maipm-close"><span class="screen-reader-text">Close</span></button></div>
+						<iframe width="100%" height="100%" src="' . $first_pdf . '"></iframe>
+					</div>';
+				echo "<script type='text/javascript'>
+					(function($) {
+						var viewer = $( '#maipm-viewer' );
+						$( '#maipm-list' ).on( 'click', '.maipm-launcher', function(e) {
+							e.preventDefault();
+							var src = $(this).attr( 'ppdf' );
+							if ( src != viewer.find( 'iframe' ).attr( 'src' ) ) {
+								viewer.find( 'iframe' ).attr( 'src', src );
 							}
+							viewer.show();
+							$(document).keydown(function(e) {
+								switch(e.which) {
+									case 27: // esc key.
+									viewer.hide();
+									break;
+									default: return;
+								}
+							});
+							viewer.on( 'click', '#maipm-close', function(f) {
+								viewer.hide();
+							});
 						});
-						viewer.on( 'click', '#ppdf-close', function(f) {
-							viewer.hide();
-						});
-					});
-				})(jQuery);
-			</script>";
+					})(jQuery);
+				</script>";
+			}
 
 		echo '</ul>';
 	}
@@ -486,7 +510,7 @@ final class PPDFS {
 	public function field_group_config() {
 		return array(
 			array (
-				'name'       => 'protected_pdfs',
+				'name'       => $this->key_name,
 				'sub_fields' => array (
 					array (
 						'name' => 'title',
@@ -513,12 +537,12 @@ final class PPDFS {
 
 		acf_add_local_field_group(array (
 			'key'    => 'group_59ee1e45d32c5',
-			'title'  => 'Protected PDFs',
+			'title'  => 'Protected Media',
 			'fields' => array (
 				array (
 					'key'               => 'field_59ee1e45d9126',
-					'label'             => 'PDFs',
-					'name'              => 'protected_pdfs',
+					'label'             => 'Files',
+					'name'              => $this->key_name,
 					'type'              => 'repeater',
 					'value'             => NULL,
 					'instructions'      => '',
@@ -533,7 +557,7 @@ final class PPDFS {
 					'min'          => 0,
 					'max'          => 0,
 					'layout'       => 'block',
-					'button_label' => 'Add PDF',
+					'button_label' => 'Add File',
 					'sub_fields'   => array (
 						array (
 							'key'               => 'field_59ee1e45dc435',
@@ -590,7 +614,7 @@ final class PPDFS {
 								'id'    => '',
 							),
 							'return_format' => 'id',
-							'preview_size'  => 'vertical-thumb',
+							'preview_size'  => 'thumbnail',
 							'library'       => 'all',
 							'min_width'     => '',
 							'min_height'    => '',
@@ -618,7 +642,7 @@ final class PPDFS {
 							'library'       => 'all',
 							'min_size'      => '',
 							'max_size'      => '',
-							'mime_types'    => 'pdf',
+							'mime_types'    => '',
 						),
 					),
 				),
@@ -661,23 +685,23 @@ final class PPDFS {
 endif; // End if class_exists check.
 
 /**
- * The main function for that returns PPDFS
+ * The main function for that returns Wampum_Protected_Media
  *
- * The main function responsible for returning the one true PPDFS
+ * The main function responsible for returning the one true Wampum_Protected_Media
  * Instance to functions everywhere.
  *
  * Use this function like you would a global variable, except without needing
  * to declare the global.
  *
- * Example: <?php $plugin = PPDFS(); ?>
+ * Example: <?php $plugin = Wampum_Protected_Media(); ?>
  *
  * @since 1.0.0
  *
- * @return object|PPDFS The one true PPDFS Instance.
+ * @return object|Wampum_Protected_Media The one true Wampum_Protected_Media Instance.
  */
-function ppdfs() {
-	return PPDFS::instance();
+function wampum_protected_media() {
+	return Wampum_Protected_Media::instance();
 }
 
-// Get PPDFS Running.
-ppdfs();
+// Get Wampum_Protected_Media Running.
+wampum_protected_media();
