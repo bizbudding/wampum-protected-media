@@ -214,8 +214,7 @@ final class Wampum_Protected_Media {
 	/**
 	 * Retrieve the absolute path to the file upload directory without the trailing slash
 	 *
-	 * @since  1.8
-	 * @return string $path Absolute path to the EDD upload directory
+	 * @return string $path Absolute path to the upload directory
 	 */
 	function get_upload_dir() {
 		$wp_upload_dir = wp_upload_dir();
@@ -226,8 +225,6 @@ final class Wampum_Protected_Media {
 
 	/**
 	 * Retrieve the .htaccess rules to wp-content/uploads/edd/
-	 *
-	 * @since 1.6
 	 *
 	 * @return mixed|void The htaccess rules
 	 */
@@ -242,7 +239,6 @@ final class Wampum_Protected_Media {
 	/**
 	 * Checks if the .htaccess file exists in wp-content/uploads/edd
 	 *
-	 * @since 1.8
 	 * @return bool
 	 */
 	function htaccess_exists() {
@@ -262,8 +258,8 @@ final class Wampum_Protected_Media {
 	}
 
 	public function upload_directory( $param ){
-		$param['path'] = $param['basedir'] . $this->directory_name;
-		$param['url']  = $param['baseurl'] . $this->directory_name;
+		$param['path'] = $param['basedir'] . '/' . $this->directory_name;
+		$param['url']  = $param['baseurl'] . '/' . $this->directory_name;
 		return $param;
 	}
 
@@ -318,8 +314,8 @@ final class Wampum_Protected_Media {
 				echo '<span class="wpm-header">Files</span>';
 			echo '</li>';
 
-			$has_pdf   = false;
-			$first_pdf = '';
+			$has_pdf    = false;
+			$viewer_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL ) );
 
 			foreach ( $items as $item ) {
 
@@ -333,22 +329,28 @@ final class Wampum_Protected_Media {
 				// File URL.
 				$direct_url = wp_get_attachment_url( $item['file'] );
 				$ext        = pathinfo( $direct_url, PATHINFO_EXTENSION );
+
+				// This file is a PDF.
 				if ( 'pdf' === $ext ) {
-					// This file is a PDF.
-					$is_pdf   = true;
-					$file_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=%s', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL, $direct_url ) );
 					// This list has a pdf.
 					if ( ! $has_pdf ) {
-						$has_pdf   = true;
-						$first_pdf = $file_url;
+						$has_pdf = true;
 					}
+					$is_pdf    = true;
+					$file_url  = esc_url( $direct_url );
 				} else {
 					$file_url = $direct_url;
 				}
 
+				// Encode.
+				$file_url = base64_encode( esc_url( $file_url ) );
+
+
 				// Maybe add launcher class to the item.
 				$launcher_class = '';
 				if ( $is_pdf ) {
+					$launcher_class = ' wpm-pdf-launcher';
+				} else {
 					$launcher_class = ' wpm-launcher';
 				}
 
@@ -398,35 +400,45 @@ final class Wampum_Protected_Media {
 			}
 
 			if ( $has_pdf ) {
-				echo '<div style="display:none;" id="wpm-viewer">
+				echo '<div style="display:none;" id="wpm-viewer-wrap">
 						<div class="wpm-close-bar"><button id="wpm-close"><span class="screen-reader-text">Close</span></button></div>
-						<iframe width="100%" height="100%" src="' . $first_pdf . '"></iframe>
+						<iframe id="wpm-viewer" width="100%" height="100%"></iframe>
 					</div>';
-				echo "<script type='text/javascript'>
-					(function($) {
-						var viewer = $( '#wpm-viewer' );
-						$( '#wpm-list' ).on( 'click', '.wpm-launcher', function(e) {
-							e.preventDefault();
-							var src = $(this).attr( 'ppdf' );
-							if ( src != viewer.find( 'iframe' ).attr( 'src' ) ) {
-								viewer.find( 'iframe' ).attr( 'src', src );
-							}
-							viewer.show();
-							$(document).keydown(function(e) {
-								switch(e.which) {
-									case 27: // esc key.
-									viewer.hide();
-									break;
-									default: return;
-								}
-							});
-							viewer.on( 'click', '#wpm-close', function(f) {
-								viewer.hide();
-							});
-						});
-					})(jQuery);
-				</script>";
 			}
+			echo "<script type='text/javascript'>
+				(function($) {
+					$( '#wpm-list' ).on( 'click', '.wpm-pdf-launcher', function(e) {
+						e.preventDefault();
+						var html   = $( '#wpm-viewer-wrap' ),
+							iframe = $( '#wpm-viewer' ),
+							viewer = '" . $viewer_url . "',
+							href   = $(this).attr( 'href' ),
+							src    = viewer + window.atob( href );
+						console.log( src );
+						if ( src != iframe.attr( 'src' ) ) {
+							iframe.attr( 'src', src );
+						}
+						html.show();
+						$(document).keydown(function(e) {
+							switch(e.which) {
+								case 27: // esc key.
+								html.hide();
+								break;
+								default: return;
+							}
+						});
+						html.on( 'click', '#wpm-close', function(f) {
+							html.hide();
+						});
+					});
+					$( '#wpm-list' ).on( 'click', '.wpm-launcher', function(e) {
+						e.preventDefault();
+						var href = $(this).attr( 'href' );
+							href = window.atob( href );
+						window.location.href = href;
+					});
+				})(jQuery);
+			</script>";
 
 		echo '</ul>';
 	}
@@ -442,6 +454,7 @@ final class Wampum_Protected_Media {
 	 * flexible content layouts.
 	 *
 	 * @link    https://www.timjensen.us/acf-get-field-alternative/
+	 * @link    https://gist.github.com/timothyjensen/eec64d73f2a44d8b38a078e05abfad4b
 	 *
 	 * @version 1.2.5
 	 *

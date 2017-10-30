@@ -1,4 +1,4 @@
-#wpm-viewer {
+#wpm-viewer-wrap {
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
@@ -6,11 +6,11 @@
 	left: 0;
 	z-index: 99999;
 }
-.admin-bar #wpm-viewer {
+.admin-bar #wpm-viewer-wrap {
 	top: 32px;
 }
 @media only screen and (max-width: 782px) {
-	.admin-bar #wpm-viewer {
+	.admin-bar #wpm-viewer-wrap {
 		top: 46px;
 	}
 }
