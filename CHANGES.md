@@ -1,3 +1,8 @@
+# Changelog
+
+#### 1.1.1 (3/16/18)
+* Fixed: Upload prefilter priority args missing causing HTTP errors when uploading files.
+
 #### 1.0.5
 * Changed: Don't swap iframe src if opening the same pdf that is already loaded.
 
