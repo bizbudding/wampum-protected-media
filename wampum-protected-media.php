@@ -3,7 +3,7 @@
  * Plugin Name:       Wampum - Protected Media
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.1.0
+ * Version:           1.1.1
  *
  * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
@@ -98,7 +98,7 @@ final class Wampum_Protected_Media {
 
 		// Plugin version.
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
-			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.1.0' );
+			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.1.1' );
 		}
 
 		// Plugin Folder Path.
@@ -155,7 +155,7 @@ final class Wampum_Protected_Media {
 	}
 
 	public function filters() {
-		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', array( $this, 'upload_prefilter' ) );
+		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', array( $this, 'upload_prefilter' ), 10, 3 );
 		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
 	}
 
@@ -257,12 +257,14 @@ final class Wampum_Protected_Media {
 		return $errors;
 	}
 
+	// Build the upload directory name.
 	public function upload_directory( $param ){
 		$param['path'] = $param['basedir'] . '/' . $this->directory_name;
 		$param['url']  = $param['baseurl'] . '/' . $this->directory_name;
 		return $param;
 	}
 
+	// Make sure the upload is in the right directory.
 	public function validate_value( $valid, $value, $field, $input ){
 		// Bail if already invalid.
 		if( ! $valid ) {
@@ -278,6 +280,7 @@ final class Wampum_Protected_Media {
 		return $valid;
 	}
 
+	// Display the file list.
 	public function display() {
 
 		// Bail if not a post type for ppdfs.
