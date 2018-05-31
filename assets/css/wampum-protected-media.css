@@ -19,6 +19,7 @@
 --------------------------------------------- */
 
 #wpm-list {
+	clear: both;
 	border: 1px solid rgba(0,0,0,0.05);
 	border-radius: 4px;
 	overflow: hidden;
