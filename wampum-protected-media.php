@@ -3,11 +3,7 @@
  * Plugin Name:       Wampum - Protected Media
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
-<<<<<<< HEAD
- * Version:           1.1.2
-=======
  * Version:           1.2.0
->>>>>>> da3eeae (initial commit to get back up and running)
  *
  * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
@@ -19,12 +15,8 @@
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-<<<<<<< HEAD
-if ( ! class_exists( 'Wampum_Protected_Media' ) ) :
-=======
 // Must be at the top of the file.
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
->>>>>>> da3eeae (initial commit to get back up and running)
 
 /**
  * Main Wampum_Protected_Media Class.
@@ -107,11 +99,7 @@ final class Wampum_Protected_Media {
 
 		// Plugin version.
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
-<<<<<<< HEAD
-			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.1.2' );
-=======
 			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.2.0' );
->>>>>>> da3eeae (initial commit to get back up and running)
 		}
 
 		// Plugin Folder Path.
@@ -138,10 +126,6 @@ final class Wampum_Protected_Media {
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_BASENAME' ) ) {
 			define( 'WAMPUM_PROTECTED_MEDIA_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
 		}
-<<<<<<< HEAD
-
-=======
->>>>>>> da3eeae (initial commit to get back up and running)
 	}
 
 	/**
@@ -159,11 +143,7 @@ final class Wampum_Protected_Media {
 		register_activation_hook(   __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
-<<<<<<< HEAD
-		add_action( 'init',                  array( $this, 'updater' ) );
-=======
 		add_action( 'plugins_loaded',        array( $this, 'updater' ), 12 );
->>>>>>> da3eeae (initial commit to get back up and running)
 		add_action( 'init',                  array( $this, 'field_group' ) );
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
@@ -179,21 +159,6 @@ final class Wampum_Protected_Media {
 		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
 	}
 
-<<<<<<< HEAD
-	public function updater() {
-		if ( is_admin() ) {
-			/**
-			 * Setup the updater.
-			 *
-			 * @uses    https://github.com/YahnisElsts/plugin-update-checker/
-			 *
-			 * @return  void
-			 */
-			if ( ! class_exists( 'Puc_v4_Factory' ) ) {
-				require_once MAI_FAVORITES_PLUGIN_DIR . 'plugin-update-checker/plugin-update-checker.php';
-			}
-			$updater = Puc_v4_Factory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'wampum-protected-media' );
-=======
 	/**
 	 * Setup the updater.
 	 *
@@ -217,7 +182,6 @@ final class Wampum_Protected_Media {
 		// Maybe set github api token.
 		if ( defined( 'MAI_GITHUB_API_TOKEN' ) ) {
 			$updater->setAuthentication( MAI_GITHUB_API_TOKEN );
->>>>>>> da3eeae (initial commit to get back up and running)
 		}
 	}
 
@@ -330,10 +294,6 @@ final class Wampum_Protected_Media {
 
 	// Display the file list.
 	public function display() {
-<<<<<<< HEAD
-
-=======
->>>>>>> da3eeae (initial commit to get back up and running)
 		// Bail if not a post type for ppdfs.
 		if ( ! is_singular( $this->get_metabox_post_types() ) ) {
 			return;
@@ -342,11 +302,6 @@ final class Wampum_Protected_Media {
 		// Get items in the field group.
 		$items = $this->get_field( get_the_ID(), $this->field_group_config() );
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> da3eeae (initial commit to get back up and running)
 		// Bail if no items.
 		if ( ! $items ) {
 			return;
@@ -364,19 +319,12 @@ final class Wampum_Protected_Media {
 			return;
 		}
 
-<<<<<<< HEAD
-		// Enqueue styles.
-		wp_enqueue_style( 'wampum-protected-media' );
-
-=======
 		// Enqueue styles and scripts.
 		// wp_enqueue_script( 'pdfjs', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs', [ 'jquery' ], '4.10.38', true );
 		// wp_enqueue_script( 'pdfjs-worker', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs', [], '4.10.38', true );
 		// wp_enqueue_style( 'pdfjs', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf_viewer.min.css', [ 'wampum-protected-media' ], '4.10.38' );
 		wp_enqueue_style( 'wampum-protected-media' );
 
-
->>>>>>> da3eeae (initial commit to get back up and running)
 		echo '<ul id="wpm-list" style="margin-left:0;">';
 
 			echo '<li class="wpm-row">';
@@ -414,10 +362,6 @@ final class Wampum_Protected_Media {
 				// Encode.
 				$file_url = base64_encode( esc_url( $file_url ) );
 
-<<<<<<< HEAD
-
-=======
->>>>>>> da3eeae (initial commit to get back up and running)
 				// Maybe add launcher class to the item.
 				$launcher_class = '';
 				if ( $is_pdf ) {
@@ -472,48 +416,6 @@ final class Wampum_Protected_Media {
 			}
 
 			if ( $has_pdf ) {
-<<<<<<< HEAD
-				echo '<div style="display:none;" id="wpm-viewer-wrap">
-						<div class="wpm-close-bar"><button id="wpm-close"><span class="screen-reader-text">Close</span></button></div>
-						<iframe id="wpm-viewer" width="100%" height="100%"></iframe>
-					</div>';
-			}
-			echo "<script type='text/javascript'>
-				(function($) {
-					$( '#wpm-list' ).on( 'click', '.wpm-pdf-launcher', function(e) {
-						e.preventDefault();
-						var html   = $( '#wpm-viewer-wrap' ),
-							iframe = $( '#wpm-viewer' ),
-							viewer = '" . $viewer_url . "',
-							href   = $(this).attr( 'href' ),
-							src    = viewer + window.atob( href );
-						console.log( src );
-						if ( src != iframe.attr( 'src' ) ) {
-							iframe.attr( 'src', src );
-						}
-						html.show();
-						$(document).keydown(function(e) {
-							switch(e.which) {
-								case 27: // esc key.
-								html.hide();
-								break;
-								default: return;
-							}
-						});
-						html.on( 'click', '#wpm-close', function(f) {
-							html.hide();
-						});
-					});
-					$( '#wpm-list' ).on( 'click', '.wpm-launcher', function(e) {
-						e.preventDefault();
-						var href = $(this).attr( 'href' );
-							href = window.atob( href );
-						window.location.href = href;
-					});
-				})(jQuery);
-			</script>";
-
-=======
 				// Add the overlay to the footer.
 				add_action( 'wp_footer', function() {
 					?>
@@ -545,7 +447,6 @@ final class Wampum_Protected_Media {
 					<?php
 				});
 			}
->>>>>>> da3eeae (initial commit to get back up and running)
 		echo '</ul>';
 	}
 
@@ -801,10 +702,6 @@ final class Wampum_Protected_Media {
 	}
 
 }
-<<<<<<< HEAD
-endif; // End if class_exists check.
-=======
->>>>>>> da3eeae (initial commit to get back up and running)
 
 /**
  * The main function for that returns Wampum_Protected_Media
