@@ -103,9 +103,12 @@
 		width: 100%;
 	}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 }
 
 .wpm-close-bar {
@@ -122,10 +125,14 @@
 	height: 60px;
 	margin-left: auto;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	background-color: rgba(0,0,0,0.6);
 =======
 	background-color: rgba(0,0,0,1);
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+	background-color: rgba(0,0,0,1);
+>>>>>>> release/1.2.0
 	color: #fff;
 	border: none;
 	-webkit-box-shadow: none;box-shadow: none;

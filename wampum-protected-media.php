@@ -4,10 +4,14 @@
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Version:           1.1.2
 =======
  * Version:           1.2.0
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+ * Version:           1.2.0
+>>>>>>> release/1.2.0
  *
  * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
@@ -20,11 +24,16 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if ( ! class_exists( 'Wampum_Protected_Media' ) ) :
 =======
 // Must be at the top of the file.
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+// Must be at the top of the file.
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+>>>>>>> release/1.2.0
 
 /**
  * Main Wampum_Protected_Media Class.
@@ -108,10 +117,14 @@ final class Wampum_Protected_Media {
 		// Plugin version.
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.1.2' );
 =======
 			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.2.0' );
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.2.0' );
+>>>>>>> release/1.2.0
 		}
 
 		// Plugin Folder Path.
@@ -139,9 +152,12 @@ final class Wampum_Protected_Media {
 			define( 'WAMPUM_PROTECTED_MEDIA_BASENAME', dirname( plugin_basename( __FILE__ ) ) );
 		}
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 	}
 
 	/**
@@ -160,10 +176,14 @@ final class Wampum_Protected_Media {
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		add_action( 'init',                  array( $this, 'updater' ) );
 =======
 		add_action( 'plugins_loaded',        array( $this, 'updater' ), 12 );
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+		add_action( 'plugins_loaded',        array( $this, 'updater' ), 12 );
+>>>>>>> release/1.2.0
 		add_action( 'init',                  array( $this, 'field_group' ) );
 		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
 		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
@@ -179,6 +199,7 @@ final class Wampum_Protected_Media {
 		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
 	}
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 	public function updater() {
 		if ( is_admin() ) {
@@ -206,18 +227,39 @@ final class Wampum_Protected_Media {
 	 * @return void
 	 */
 	public function updater() {
+=======
+	/**
+	 * Setup the updater.
+	 *
+	 * composer require yahnis-elsts/plugin-update-checker
+	 *
+	 * @since 0.1.0
+	 *
+	 * @uses https://github.com/YahnisElsts/plugin-update-checker/
+	 *
+	 * @return void
+	 */
+	public function updater() {
+>>>>>>> release/1.2.0
 		// Bail if plugin updater is not loaded.
 		if ( ! class_exists( 'YahnisElsts\PluginUpdateChecker\v5\PucFactory' ) ) {
 			return;
 		}
 
 		// Setup the updater.
+<<<<<<< HEAD
 		$updater = PucFactory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'mai-ai-pack' );
+=======
+		$updater = PucFactory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'wampum-protected-media' );
+>>>>>>> release/1.2.0
 
 		// Maybe set github api token.
 		if ( defined( 'MAI_GITHUB_API_TOKEN' ) ) {
 			$updater->setAuthentication( MAI_GITHUB_API_TOKEN );
+<<<<<<< HEAD
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 		}
 	}
 
@@ -331,9 +373,12 @@ final class Wampum_Protected_Media {
 	// Display the file list.
 	public function display() {
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 		// Bail if not a post type for ppdfs.
 		if ( ! is_singular( $this->get_metabox_post_types() ) ) {
 			return;
@@ -365,7 +410,14 @@ final class Wampum_Protected_Media {
 		}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 		// Enqueue styles.
+=======
+		// Enqueue styles and scripts.
+		// wp_enqueue_script( 'pdfjs', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs', [ 'jquery' ], '4.10.38', true );
+		// wp_enqueue_script( 'pdfjs-worker', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs', [], '4.10.38', true );
+		// wp_enqueue_style( 'pdfjs', 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf_viewer.min.css', [ 'wampum-protected-media' ], '4.10.38' );
+>>>>>>> release/1.2.0
 		wp_enqueue_style( 'wampum-protected-media' );
 
 =======
@@ -415,9 +467,12 @@ final class Wampum_Protected_Media {
 				$file_url = base64_encode( esc_url( $file_url ) );
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 				// Maybe add launcher class to the item.
 				$launcher_class = '';
 				if ( $is_pdf ) {
@@ -472,6 +527,7 @@ final class Wampum_Protected_Media {
 			}
 
 			if ( $has_pdf ) {
+<<<<<<< HEAD
 <<<<<<< HEAD
 				echo '<div style="display:none;" id="wpm-viewer-wrap">
 						<div class="wpm-close-bar"><button id="wpm-close"><span class="screen-reader-text">Close</span></button></div>
@@ -546,6 +602,39 @@ final class Wampum_Protected_Media {
 				});
 			}
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+				// Add the overlay to the footer.
+				add_action( 'wp_footer', function() {
+					?>
+					<div id="wpm-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:100000;">
+						<button id="wpm-close" style="position:absolute;top:36px;right:20px;z-index:100001;"><span class="screen-reader-text">Close</span></button>
+						<iframe id="wpm-iframe" src="" style="width:100%;height:100%;border:none;"></iframe>
+					</div>
+					<script type="text/javascript">
+						document.addEventListener('DOMContentLoaded', function() {
+							const list    = document.getElementById('wpm-list');
+							const overlay = document.getElementById('wpm-overlay');
+							const iframe  = document.getElementById('wpm-iframe');
+							list.addEventListener('click', function(e) {
+								if (e.target.closest('.wpm-pdf-launcher')) {
+									e.preventDefault();
+									const launcher = e.target.closest('.wpm-pdf-launcher');
+									iframe.src = window.atob(launcher.getAttribute('href'));
+									overlay.style.display = 'block';
+								}
+							});
+							overlay.addEventListener('click', function(e) {
+								if (e.target.matches('#wpm-close')) {
+									overlay.style.display = 'none';
+									iframe.src = '';
+								}
+							});
+						});
+					</script>
+					<?php
+				});
+			}
+>>>>>>> release/1.2.0
 		echo '</ul>';
 	}
 
@@ -802,9 +891,12 @@ final class Wampum_Protected_Media {
 
 }
 <<<<<<< HEAD
+<<<<<<< HEAD
 endif; // End if class_exists check.
 =======
 >>>>>>> da3eeae (initial commit to get back up and running)
+=======
+>>>>>>> release/1.2.0
 
 /**
  * The main function for that returns Wampum_Protected_Media
