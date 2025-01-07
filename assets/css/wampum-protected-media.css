@@ -102,7 +102,10 @@
 	.wpm-cell {
 		width: 100%;
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> da3eeae (initial commit to get back up and running)
 }
 
 .wpm-close-bar {
@@ -118,7 +121,11 @@
 	width: 60px;
 	height: 60px;
 	margin-left: auto;
+<<<<<<< HEAD
 	background-color: rgba(0,0,0,0.6);
+=======
+	background-color: rgba(0,0,0,1);
+>>>>>>> da3eeae (initial commit to get back up and running)
 	color: #fff;
 	border: none;
 	-webkit-box-shadow: none;box-shadow: none;
