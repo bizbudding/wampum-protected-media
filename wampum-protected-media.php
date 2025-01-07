@@ -212,7 +212,7 @@ final class Wampum_Protected_Media {
 		}
 
 		// Setup the updater.
-		$updater = PucFactory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'mai-ai-pack' );
+		$updater = PucFactory::buildUpdateChecker( 'https://github.com/bizbudding/wampum-protected-media/', __FILE__, 'wampum-protected-media' );
 
 		// Maybe set github api token.
 		if ( defined( 'MAI_GITHUB_API_TOKEN' ) ) {
