@@ -121,6 +121,7 @@
 	background-color: rgba(0,0,0,1);
 	color: #fff;
 	border: none;
+	border-radius: 0;
 	-webkit-box-shadow: none;box-shadow: none;
 }
 
