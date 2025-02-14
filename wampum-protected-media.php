@@ -421,7 +421,15 @@ final class Wampum_Protected_Media {
 					?>
 					<div id="wpm-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:100000;">
 						<button id="wpm-close" style="position:absolute;top:36px;right:20px;z-index:100001;"><span class="screen-reader-text">Close</span></button>
-						<iframe id="wpm-iframe" src="" style="width:100%;height:100%;border:none;"></iframe>
+						<iframe
+							id="wpm-iframe"
+							src=""
+							type="application/pdf"
+							width="100%"
+							height="100%"
+							style="border:none;"
+							sandbox="allow-scripts allow-same-origin"
+						></iframe>
 					</div>
 					<script type="text/javascript">
 						document.addEventListener('DOMContentLoaded', function() {
@@ -432,14 +440,16 @@ final class Wampum_Protected_Media {
 								if (e.target.closest('.wpm-pdf-launcher')) {
 									e.preventDefault();
 									const launcher = e.target.closest('.wpm-pdf-launcher');
-									iframe.src = window.atob(launcher.getAttribute('href'));
+									iframe.src = 'https://docs.google.com/gview?url=' + window.atob(launcher.getAttribute('href')) + '&embedded=true';
 									overlay.style.display = 'block';
+									document.documentElement.style.overflow = 'hidden';
 								}
 							});
 							overlay.addEventListener('click', function(e) {
 								if (e.target.matches('#wpm-close')) {
 									overlay.style.display = 'none';
 									iframe.src = '';
+									document.documentElement.style.overflow = '';
 								}
 							});
 						});
