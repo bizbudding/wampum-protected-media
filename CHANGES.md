@@ -1,5 +1,12 @@
 # Changelog
 
+#### 1.3.0
+* Changed: Convert to google docs view instead of direct iframe.
+* Changed: Close button position.
+
+#### 1.2.0
+* Changed: Remove PDF.js and use iframe overlay.
+
 #### 1.1.1 (3/16/18)
 * Fixed: Upload prefilter priority args missing causing HTTP errors when uploading files.
 
