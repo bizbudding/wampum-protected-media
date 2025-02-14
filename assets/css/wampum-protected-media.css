@@ -118,7 +118,7 @@
 	height: 40px;
 	margin: 0;
 	padding: 0;
-	background-color: rgba(0,0,0,1);
+	background-color: #202020; /* matches google docs view buttons */
 	color: #fff;
 	border: none;
 	border-radius: 0;
