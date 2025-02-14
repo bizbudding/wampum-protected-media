@@ -420,7 +420,7 @@ final class Wampum_Protected_Media {
 				add_action( 'wp_footer', function() {
 					?>
 					<div id="wpm-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:100000;">
-						<button id="wpm-close" style="position:absolute;top:36px;right:20px;z-index:100001;"><span class="screen-reader-text">Close</span></button>
+						<button id="wpm-close" style="position:absolute;top:20px;left:20px;z-index:100001;"><span class="screen-reader-text">Close</span></button>
 						<iframe
 							id="wpm-iframe"
 							src=""
