@@ -331,8 +331,7 @@ final class Wampum_Protected_Media {
 				echo '<span class="wpm-header">Files</span>';
 			echo '</li>';
 
-			$has_pdf    = false;
-			$viewer_url = esc_url( sprintf( '%spdfjs/web/viewer.html?file=', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL ) );
+			$has_pdf = false;
 
 			foreach ( $items as $item ) {
 
