@@ -102,13 +102,6 @@
 	.wpm-cell {
 		width: 100%;
 	}
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> da3eeae (initial commit to get back up and running)
-=======
->>>>>>> release/1.2.0
 }
 
 .wpm-close-bar {
@@ -121,20 +114,14 @@
 #wpm-close {
 	position: relative;
 	display: block;
-	width: 60px;
-	height: 60px;
-	margin-left: auto;
-<<<<<<< HEAD
-<<<<<<< HEAD
-	background-color: rgba(0,0,0,0.6);
-=======
-	background-color: rgba(0,0,0,1);
->>>>>>> da3eeae (initial commit to get back up and running)
-=======
-	background-color: rgba(0,0,0,1);
->>>>>>> release/1.2.0
-	color: #fff;
+	width: 40px;
+	height: 40px;
+	margin: 0;
+	padding: 0;
+	background-color: #202020; /* matches google docs view buttons */
+	color: #C4C7C5;
 	border: none;
+	border-radius: 0;
 	-webkit-box-shadow: none;box-shadow: none;
 }
 
