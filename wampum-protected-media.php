@@ -3,7 +3,7 @@
  * Plugin Name:       Wampum - Protected Media
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to (via PDF.js). Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.3.1
+ * Version:           1.3.2
  *
  * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
@@ -99,7 +99,7 @@ final class Wampum_Protected_Media {
 
 		// Plugin version.
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
-			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.3.1' );
+			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.3.2' );
 		}
 
 		// Plugin Folder Path.
