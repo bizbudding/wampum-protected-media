@@ -82,6 +82,11 @@
 	padding: 8px 20px;
 }
 
+.wpm-actions {
+	display: flex;
+	gap: 1em;
+}
+
 .button.wpm-button,
 .entry-content .button.wpm-button {
 	font-size: 14px;
@@ -102,6 +107,7 @@
 	.wpm-cell {
 		width: 100%;
 	}
+
 }
 
 .wpm-close-bar {
@@ -116,12 +122,10 @@
 	display: block;
 	width: 40px;
 	height: 40px;
-	margin: 0;
-	padding: 0;
-	background-color: #202020; /* matches google docs view buttons */
-	color: #C4C7C5;
+	margin-left: auto;
+	background-color: rgba(0,0,0,0.6);
+	color: #fff;
 	border: none;
-	border-radius: 0;
 	-webkit-box-shadow: none;box-shadow: none;
 }
 

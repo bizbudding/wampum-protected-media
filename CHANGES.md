@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.3.2 (2/20/25)
+* Fixed: PDFs and zips can now be viewed and downloaded.
+
 ## 1.3.1
 * Changed: vbump for cache.
 
