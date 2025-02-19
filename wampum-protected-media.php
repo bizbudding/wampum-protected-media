@@ -402,12 +402,24 @@ final class Wampum_Protected_Media {
 					$title . $desc
 				);
 
-				// Actions/buttons.
-				$button_text = __( 'View', 'wampum-protected-media' );
-				if ( 'zip' === $ext ) {
-					$button_text = __( 'Download', 'wampum-protected-media' );
+				// Handle most files.
+				if ( 'zip' !== $ext ) {
+					// View/Download button.
+					$actions = sprintf( '<a href="%s" class="wpm-button more-link%s">%s</a>', $file_url, $launcher_class, __( 'View', 'wampum-protected-media' ) );
 				}
-				$actions = sprintf( '<span class="wpm-cell wpm-auto wpm-actions"><a href="%s" class="wpm-button more-link%s">%s</a></span>', $file_url, $launcher_class, $button_text );
+
+				// Handle PDFs.
+				if ( 'pdf' === $ext || 'zip' === $ext ) {
+					$actions .= sprintf(
+						'<a href="%s" class="wpm-button" download="%s">%s</a>',
+						$direct_url, // Use direct URL instead of base64 encoded.
+						basename( $direct_url ), // Set the download filename.
+						__( 'Download', 'wampum-protected-media' )
+					);
+				}
+
+				// Wrap the actions in a span.
+				$actions = sprintf( '<span class="wpm-cell wpm-auto wpm-actions">%s</span>', $actions );
 
 				// Output the row.
 				printf( '<li class="wpm-row">%s%s%s</li>', $image, $content, $actions );
