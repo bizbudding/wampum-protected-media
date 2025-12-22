@@ -1,17 +1,19 @@
 # Changelog
 
+## 1.4.0
+* Changed: Replace .htaccess referrer protection with time-limited token-based protection.
+* Changed: Use WordPress action hooks instead of standalone download.php file (fixes symlink issues).
+* Changed: Remove iframe overlay complexity - PDFs now open directly in browser.
+* Changed: Token expiration reduced from 24 hours to 2 hours.
+* Changed: Replace custom get_field() method with ACF's built-in get_field() function.
+* Removed: All .htaccess code (not needed with Nginx).
+* Removed: download.php file (using WordPress hooks instead).
+
 ## 1.3.2 (2/20/25)
 * Fixed: PDFs and zips can now be viewed and downloaded.
 
-## 1.3.1
-* Changed: vbump for cache.
-
-## 1.3.0
-* Changed: Convert to google docs view instead of direct iframe.
-* Changed: Close button position.
-
-## 1.2.0
-* Changed: Remove PDF.js and use iframe overlay.
+## 1.1.2 (5/31/18)
+* Fixed: Clear floats on file list display.
 
 ## 1.1.1 (3/16/18)
 * Fixed: Upload prefilter priority args missing causing HTTP errors when uploading files.
