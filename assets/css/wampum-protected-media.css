@@ -90,11 +90,9 @@
 .button.wpm-button,
 .entry-content .button.wpm-button {
 	font-size: 14px;
-	font-weight: 700;
 	line-height: 1;
 	padding: .618em 1em;
 	white-space: nowrap;
-	margin: 2px;
 }
 
 @media only screen and (max-width: 668px) {
