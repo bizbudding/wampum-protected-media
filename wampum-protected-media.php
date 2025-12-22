@@ -501,7 +501,7 @@ final class Wampum_Protected_Media {
 				// Handle most files.
 				if ( 'zip' !== $ext ) {
 					// View/Download button.
-					$actions = sprintf( '<a href="%s" class="wpm-button button button-secondary button-smallmore-link" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $file_url ), __( 'View', 'wampum-protected-media' ) );
+					$actions = sprintf( '<a href="%s" class="wpm-button button button-secondary button-small more-link" target="_blank" rel="noopener noreferrer">%s</a>', esc_url( $file_url ), __( 'View', 'wampum-protected-media' ) );
 				}
 
 				// Handle PDFs and ZIPs.
