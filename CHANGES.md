@@ -1,6 +1,7 @@
 # Changelog
 
-## 1.4.0
+## 1.4.0 (2/22/25)
+* Added: Support for Restrict Content Pro and WooCommerce Memberships so files are only shown if the user can access/view the post content.
 * Changed: Replace .htaccess referrer protection with time-limited token-based protection.
 * Changed: Use WordPress action hooks instead of standalone download.php file (fixes symlink issues).
 * Changed: Remove iframe overlay complexity - PDFs now open directly in browser.
