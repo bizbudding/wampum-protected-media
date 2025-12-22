@@ -415,11 +415,23 @@ final class Wampum_Protected_Media {
 			return;
 		}
 
+		$post_id = get_the_ID();
+
 		// Get items in the field group using ACF's get_field.
-		$items = get_field( $this->key_name, get_the_ID() );
+		$items = get_field( $this->key_name, $post_id );
 
 		// Bail if no items.
 		if ( ! $items ) {
+			return;
+		}
+
+		// If using RCP, bail if this post is restricted.
+		if ( function_exists( 'rcp_is_restricted_content' ) && rcp_is_restricted_content( $post_id ) ) {
+			return;
+		}
+
+		// If using WooCommerce Memberships, bail if this post is restricted.
+		if ( function_exists( 'wc_memberships_is_post_content_restricted' ) && wc_memberships_is_post_content_restricted( $post_id ) ) {
 			return;
 		}
 
