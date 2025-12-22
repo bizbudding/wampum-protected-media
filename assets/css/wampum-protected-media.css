@@ -84,7 +84,7 @@
 
 .wpm-actions {
 	display: flex;
-	gap: 1em;
+	gap: .25em;
 }
 
 .button.wpm-button,
