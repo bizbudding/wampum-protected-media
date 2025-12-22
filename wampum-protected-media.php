@@ -425,14 +425,18 @@ final class Wampum_Protected_Media {
 			return;
 		}
 
-		// If using RCP, bail if this post is restricted.
-		if ( function_exists( 'rcp_is_restricted_content' ) && rcp_is_restricted_content( $post_id ) ) {
-			return;
+		// Check if user has access to this post (RCP).
+		if ( function_exists( 'rcp_user_can_access' ) ) {
+			if ( ! rcp_user_can_access( get_current_user_id(), $post_id ) ) {
+				return; // User doesn't have access, don't show files.
+			}
 		}
 
-		// If using WooCommerce Memberships, bail if this post is restricted.
-		if ( function_exists( 'wc_memberships_is_post_content_restricted' ) && wc_memberships_is_post_content_restricted( $post_id ) ) {
-			return;
+		// Check if user has access to this post (WooCommerce Memberships).
+		if ( function_exists( 'wc_memberships_user_can' ) ) {
+			if ( ! wc_memberships_user_can( get_current_user_id(), 'view', array( 'post' => $post_id ) ) ) {
+				return; // User doesn't have access, don't show files.
+			}
 		}
 
 		// Enqueue styles and scripts.
