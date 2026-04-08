@@ -3,7 +3,10 @@
  * Plugin Name:       Wampum - Protected Media
  * Plugin URI:        https://bizbudding.com
  * Description:       Attach PDFs to pages/posts/cpts that can only be viewed from the pages they are attached to. Files are protected with time-limited tokens. Requires Genesis for file display and ACF Pro for the files metabox.
- * Version:           1.4.0
+ * Version:           1.5.0
+ *
+ * Requires PHP:      8.0
+ * Requires at least: 6.0
  *
  * Author:            Mike Hemberger, BizBudding
  * Author URI:        https://bizbudding.com
@@ -99,7 +102,7 @@ final class Wampum_Protected_Media {
 
 		// Plugin version.
 		if ( ! defined( 'WAMPUM_PROTECTED_MEDIA_VERSION' ) ) {
-			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.4.0' );
+			define( 'WAMPUM_PROTECTED_MEDIA_VERSION', '1.5.0' );
 		}
 
 		// Plugin Folder Path.
@@ -136,25 +139,25 @@ final class Wampum_Protected_Media {
 		require_once __DIR__ . '/vendor/autoload.php';
 	}
 
-	public function hooks() {
-		register_activation_hook(   __FILE__, array( $this, 'activate' ) );
+	public function hooks(): void {
+		register_activation_hook(   __FILE__, [ $this, 'activate' ] );
 		register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );
 
-		add_action( 'plugins_loaded',        array( $this, 'updater' ), 12 );
-		add_action( 'init',                  array( $this, 'field_group' ) );
-		add_action( 'admin_init',            array( $this, 'create_protection_files' ) );
-		add_action( 'wp_enqueue_scripts',    array( $this, 'register_scripts' ) );
-		add_action( 'genesis_entry_content', array( $this, 'display' ), 20 );
-		add_action( 'template_redirect',     array( $this, 'serve_protected_file' ) );
+		add_action( 'plugins_loaded',        [ $this, 'updater' ], 12 );
+		add_action( 'init',                  [ $this, 'field_group' ] );
+		add_action( 'admin_init',            [ $this, 'create_protection_files' ] );
+		add_action( 'wp_enqueue_scripts',    [ $this, 'register_scripts' ] );
+		add_action( 'genesis_entry_content', [ $this, 'display' ], 20 );
+		add_action( 'template_redirect',     [ $this, 'serve_protected_file' ] );
 	}
 
 	public function activate() {
 		flush_rewrite_rules();
 	}
 
-	public function filters() {
-		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', array( $this, 'upload_prefilter' ), 10, 3 );
-		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   array( $this, 'validate_value' ), 10, 4 );
+	public function filters(): void {
+		add_filter( 'acf/upload_prefilter/key=field_59ee1e45dc4b8', [ $this, 'upload_prefilter' ], 10, 3 );
+		add_filter( 'acf/validate_value/key=field_59ee1e45dc4b8',   [ $this, 'validate_value' ], 10, 4 );
 	}
 
 	/**
@@ -193,14 +196,14 @@ final class Wampum_Protected_Media {
 	 *
 	 * @param bool $force
 	 */
-	function create_protection_files( $force = false ) {
+	public function create_protection_files( $force = false ): void {
 		if ( false === get_transient( 'wampum_check_protection_files' ) || $force ) {
 			$upload_path = $this->get_upload_dir();
 			// Make sure the upload directory is created
 			wp_mkdir_p( $upload_path );
 			// Top level blank index.php
 			if ( ! file_exists( $upload_path . '/index.php' ) && wp_is_writable( $upload_path ) ) {
-				@file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
+				file_put_contents( $upload_path . '/index.php', '<?php' . PHP_EOL . '// Silence is golden.' );
 			}
 			// Check for the files once per day
 			set_transient( 'wampum_check_protection_files', true, 3600 * 24 );
@@ -212,7 +215,7 @@ final class Wampum_Protected_Media {
 	 *
 	 * @return string $path Absolute path to the upload directory
 	 */
-	function get_upload_dir() {
+	public function get_upload_dir(): string {
 		$wp_upload_dir = wp_upload_dir();
 		wp_mkdir_p( $wp_upload_dir['basedir'] . '/' . $this->directory_name );
 		$path = $wp_upload_dir['basedir'] . '/' . $this->directory_name;
@@ -222,7 +225,7 @@ final class Wampum_Protected_Media {
 
 	// Register scripts for later enqueue.
 	public function register_scripts() {
-		wp_register_style( 'wampum-protected-media', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL . 'assets/css/wampum-protected-media.css', array(), WAMPUM_PROTECTED_MEDIA_VERSION );
+		wp_register_style( 'wampum-protected-media', WAMPUM_PROTECTED_MEDIA_PLUGIN_URL . 'assets/css/wampum-protected-media.css', [], WAMPUM_PROTECTED_MEDIA_VERSION );
 	}
 
 	/**
@@ -257,11 +260,11 @@ final class Wampum_Protected_Media {
 
 		// Build protected URL using WordPress endpoint.
 		$protected_url = add_query_arg(
-			array(
+			[
 				'wpm_download' => '1',
 				'token'        => $token,
 				'file'         => $attachment_id,
-			),
+			],
 			home_url( '/' )
 		);
 
@@ -356,12 +359,12 @@ final class Wampum_Protected_Media {
 		$filename = basename( $file_path );
 
 		// Allow filtering of headers.
-		$headers = apply_filters( 'wampum_protected_media_download_headers', array(
+		$headers = apply_filters( 'wampum_protected_media_download_headers', [
 			'X-Robots-Tag'        => 'noindex',
 			'Content-Type'        => $mime_type,
 			'Content-Disposition' => $disposition . '; filename="' . $filename . '"',
 			'Content-Length'      => filesize( $file_path ),
-		), $file_id, $is_pdf );
+		], $file_id, $is_pdf );
 
 		// Set headers.
 		nocache_headers();
@@ -376,7 +379,7 @@ final class Wampum_Protected_Media {
 
 	// Change the upload directory.
 	public function upload_prefilter( $errors, $file, $field ) {
-		add_filter( 'upload_dir',  array( $this, 'upload_directory' ) );
+		add_filter( 'upload_dir', [ $this, 'upload_directory' ] );
 		return $errors;
 	}
 
@@ -434,7 +437,7 @@ final class Wampum_Protected_Media {
 
 		// Check if user has access to this post (WooCommerce Memberships).
 		if ( function_exists( 'wc_memberships_user_can' ) ) {
-			if ( ! wc_memberships_user_can( get_current_user_id(), 'view', array( 'post' => $post_id ) ) ) {
+			if ( ! wc_memberships_user_can( get_current_user_id(), 'view', [ 'post' => $post_id ] ) ) {
 				return; // User doesn't have access, don't show files.
 			}
 		}
@@ -531,84 +534,84 @@ final class Wampum_Protected_Media {
 			return;
 		}
 
-		acf_add_local_field_group( array(
+		acf_add_local_field_group( [
 			'key'    => 'group_59ee1e45d32c5',
 			'title'  => 'Protected Media',
-			'fields' => array (
-				array (
+			'fields' => [
+				[
 					'key'               => 'field_59ee1e45d9126',
 					'label'             => 'Files',
 					'name'              => $this->key_name,
 					'type'              => 'repeater',
-					'value'             => NULL,
+					'value'             => null,
 					'instructions'      => '',
 					'required'          => 0,
 					'conditional_logic' => 0,
-					'wrapper'           => array (
+					'wrapper'           => [
 						'width' => '',
 						'class' => '',
 						'id'    => '',
-					),
+					],
 					'collapsed'    => 'field_59ee1e45dc435',
 					'min'          => 0,
 					'max'          => 0,
 					'layout'       => 'block',
 					'button_label' => 'Add File',
-					'sub_fields'   => array (
-						array (
+					'sub_fields'   => [
+						[
 							'key'               => 'field_59ee1e45dc435',
 							'label'             => 'Title',
 							'name'              => 'title',
 							'type'              => 'text',
-							'value'             => NULL,
+							'value'             => null,
 							'instructions'      => '',
 							'required'          => 0,
 							'conditional_logic' => 0,
-							'wrapper'           => array (
+							'wrapper'           => [
 								'width' => '',
 								'class' => '',
 								'id'    => '',
-							),
+							],
 							'default_value' => '',
 							'placeholder'   => '',
 							'prepend'       => '',
 							'append'        => '',
 							'maxlength'     => '',
-						),
-						array (
+						],
+						[
 							'key'               => 'field_59ee1e45dc463',
 							'label'             => 'Description',
 							'name'              => 'desc',
 							'type'              => 'textarea',
-							'value'             => NULL,
+							'value'             => null,
 							'instructions'      => '',
 							'required'          => 0,
 							'conditional_logic' => 0,
-							'wrapper'           => array (
+							'wrapper'           => [
 								'width' => '',
 								'class' => '',
 								'id'    => '',
-							),
+							],
 							'default_value' => '',
 							'placeholder'   => '',
 							'maxlength'     => '',
 							'rows'          => 3,
 							'new_lines'     => '',
-						),
-						array (
+						],
+						[
 							'key'               => 'field_59ee1e45dc48e',
 							'label'             => 'Image',
 							'name'              => 'image',
 							'type'              => 'image',
-							'value'             => NULL,
+							'value'             => null,
 							'instructions'      => '',
 							'required'          => 0,
 							'conditional_logic' => 0,
-							'wrapper'           => array (
+							'wrapper'           => [
 								'width' => '30',
 								'class' => '',
 								'id'    => '',
-							),
+							],
 							'return_format' => 'id',
 							'preview_size'  => 'thumbnail',
 							'library'       => 'all',
@@ -619,30 +622,30 @@ final class Wampum_Protected_Media {
 							'max_height'    => '',
 							'max_size'      => '',
 							'mime_types'    => '',
-						),
-						array (
+						],
+						[
 							'key'               => 'field_59ee1e45dc4b8',
 							'label'             => 'File',
 							'name'              => 'file',
 							'type'              => 'file',
-							'value'             => NULL,
+							'value'             => null,
 							'instructions'      => '',
 							'required'          => 1,
 							'conditional_logic' => 0,
-							'wrapper'           => array (
+							'wrapper'           => [
 								'width' => '70',
 								'class' => '',
 								'id'    => '',
-							),
+							],
 							'return_format' => 'id',
 							'library'       => 'all',
 							'min_size'      => '',
 							'max_size'      => '',
 							'mime_types'    => '',
-						),
-					),
-				),
-			),
+						],
+					],
+				],
+			],
 			'location'              => $this->get_metabox_post_types_config(),
 			'menu_order'            => 0,
 			'position'              => 'normal',
@@ -652,27 +655,28 @@ final class Wampum_Protected_Media {
 			'hide_on_screen'        => '',
 			'active'                => 1,
 			'description'           => '',
-		));
+		] );
 	}
 
-	public function get_metabox_post_types_config() {
-		$config     = '';
+	public function get_metabox_post_types_config(): array {
+		$config     = [];
 		$post_types = $this->get_metabox_post_types();
-		if ( $post_types ) {
-			$config = array();
-			foreach ( $post_types as $post_type ) {
-				$config[] = array( array(
+
+		foreach ( $post_types as $post_type ) {
+			$config[] = [
+				[
 					'param'    => 'post_type',
 					'operator' => '==',
 					'value'    => $post_type,
-				) );
-			}
+				],
+			];
 		}
+
 		return $config;
 	}
 
-	public function get_metabox_post_types() {
-		$post_types = get_post_types( array( 'public' => true ), 'names' );
+	public function get_metabox_post_types(): array {
+		$post_types = get_post_types( [ 'public' => true ], 'names' );
 		$post_types = apply_filters( 'wampum_protected_media_post_types', $post_types );
 		return (array) $post_types;
 	}
