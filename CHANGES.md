@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.5.0 (4/9/26)
+* Changed: PHP 8.4 compatibility.
+
 ## 1.4.0 (2/22/25)
 * Added: Support for Restrict Content Pro and WooCommerce Memberships so files are only shown if the user can access/view the post content.
 * Changed: Replace .htaccess referrer protection with time-limited token-based protection.
